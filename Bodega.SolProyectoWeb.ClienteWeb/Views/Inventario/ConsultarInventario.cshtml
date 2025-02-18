@@ -1,0 +1,278 @@
+﻿@model  List<Bodega.SolProyectoWeb.Entidades.Core.Producto>
+
+@{
+    ViewBag.Title = "ConsultarInventario";
+}
+
+<div class="consulta-inventario-container">
+    <!-- Encabezado -->
+    <div class="header-container">
+        <h2>CONSULTAR INVENTARIO</h2>
+    </div>
+
+    <!-- Formulario de búsqueda -->
+    <form method="post" action="/Inventario/ConsultarInventario">
+        <label for="criterio" style="font-weight: bold;">Criterio de búsqueda:</label>
+        <select id="criterio" name="criterio">
+            <option value="">SELECCIONAR</option>
+            <option value="Categoria">Categoría</option>
+            <option value="Precio">Precio</option>
+        </select>
+
+        <input type="text" id="valor" name="valor" placeholder="Ingrese valor de búsqueda" />
+        <button type="submit" class="btn-primary">Buscar</button>
+    </form>
+
+    <!-- Tabla de resultados -->
+    <table id="tablax">
+        <thead>
+            <tr>
+                <th>Código</th>
+                <th>Producto</th>
+                <th>Categoría</th>
+                <th>Precio</th>
+                <th>Stock</th>
+                <th>Descripción</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model != null && Model.Any())
+            {
+                foreach (var producto in Model)
+                {
+                    <tr>
+                        <td>@producto.id_producto</td>
+                        <td>@producto.nombre</td>
+                        <td>@producto.nombre_categoria</td>
+                        <td>@producto.precio</td>
+                        <td>@producto.stock</td>
+                        <td>@producto.descripcion</td>
+                    </tr>
+                }
+            }
+            else
+            {
+                <tr>
+                    <td colspan="6">No se encontraron productos.</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <!-- Botones de acción -->
+    <div class="action-buttons">
+        <button type="reset" onclick="window.location.href='/Inventario/ConsultarInventario'" class="btn-secondary">Cancelar</button>
+    </div>
+</div>
+
+
+@section Scripts{
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.min.js"></script>
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
+
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+
+
+    <script>
+
+        $(document).ready(function () {
+
+            var message = '@Html.Raw(TempData["Message"] ?? "")';
+            var messageType = '@TempData["MessageType"]';
+
+            if (message) {
+                Swal.fire({
+
+                    text: message,
+                    icon: (messageType === "success" || messageType === "error" || messageType === "warning") ? null : messageType,
+                    confirmButtonText: 'Aceptar',
+                    confirmButtonColor: '#007bff',
+                    customClass: {
+                        confirmButton: (messageType === "success") ? 'btn-success' :
+                            (messageType === "error") ? 'btn-danger' :
+                                'btn-warning'
+                    }
+                });
+            }
+        });
+
+        //Formateo de precio
+        $(document).ready(function () {
+            $('form').submit(function () {
+                var valor = $('#valor').val();
+                if (valor) {
+                    $('#valor').val(valor.replace(',', '.'));
+                }
+            });
+        });
+    </script>
+
+    <style>
+        #tablax th, #tablax td {
+            text-align: center;
+            vertical-align: middle;
+        }
+
+        #tablax th, #tablax td {
+            white-space: nowrap;
+        }
+
+        .swal2-icon.swal2-success {
+            display: none; /* Esto oculta el ícono de "check" */
+        }
+    </style>
+
+    <style>
+        .consulta-inventario-container {
+            background: url('/ruta/de/tu/fondo.jpg') center/cover no-repeat;
+            padding: 30px;
+            border-radius: 8px;
+            color: #333;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .header-container {
+            background-color: #F7C367;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 8px;
+            color: black;
+            font-weight: bold;
+            position: relative;
+            margin-bottom: 30px;
+        }
+
+        .header-container h2 {
+            margin: 0;
+            font-size: 1.5rem;
+            color: #333;
+            flex-grow: 1;
+            text-align: center;
+        }
+
+        .logo-image {
+            position: absolute;
+            left: 10px;
+            max-width: 150px;
+            height: auto;
+        }
+
+        form {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        select, input[type="text"] {
+            padding: 8px;
+            width: 200px;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+        }
+
+        /* Botones */
+        .btn-primary {
+            background-color: #B0C0CD;
+            border-color: #B0C0CD;
+            color: black;
+            font-weight: bold;
+            margin-right: 5px;
+        }
+
+        .btn-primary:hover {
+            background-color: #003d80; /* Azul oscuro */
+            border-color: #003d80;
+            color: white;
+        }
+
+        .btn-secondary {
+            background-color: #B0C0CD;
+            border-color: #B0C0CD;
+            color: black;
+            font-weight: bold;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn-secondary:hover {
+            background-color: #003d80; /* Azul oscuro */
+            border-color: #003d80;
+            color: white;
+        }
+
+        button[type="submit"], button[type="reset"] {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: rgba(255, 255, 255, 0.9);
+            margin-bottom: 20px;
+        }
+
+        th, td {
+            padding: 15px;
+            border: 1px solid #ddd;
+            text-align: center;
+        }
+
+        th {
+            background-color: #F7C367;
+            color: black;
+            font-weight: bold;
+        }
+
+        .action-buttons {
+            margin-top: 30px;
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+        }
+
+        .swal-popup-custom {
+            background-color: #ffffff !important; /* Fondo blanco */
+            border-radius: 8px; /* Esquinas redondeadas */
+            color: #333333; /* Color de texto */
+        }
+
+        .swal-button-custom {
+            background-color: #007bff !important; /* Azul para el botón */
+            color: #d3d3d3 !important; /* Texto blanco en el botón */
+            border-radius: 5px; /* Botón con bordes redondeados */
+            padding: 10px 20px; /* Tamaño del botón */
+            font-weight: bold;
+        }
+
+        /* Estilos adicionales para las sugerencias */
+        #suggestions {
+            background: white;
+            border: 1px solid #ddd;
+            max-height: 150px;
+            overflow-y: auto;
+            position: absolute;
+            z-index: 1000;
+        }
+
+        #suggestions li {
+            padding: 8px;
+            cursor: pointer;
+        }
+
+        #suggestions li:hover {
+            background-color: #007bff;
+            color: white;
+        }
+    </style>
+
+}
