@@ -6,7 +6,6 @@
 
 <style>
     .consulta-venta-container {
-        background: url('/ruta/de/tu/fondo.jpg') center/cover no-repeat;
         padding: 30px; /* Aumenta el padding para más espacio interno */
         border-radius: 8px;
         color: #333;
@@ -16,7 +15,7 @@
 
     /* Contenedor del encabezado con logo y texto */
     .header-container {
-        background-color: #ffcd00;
+        background-color: #F7C367;
         padding: 20px; /* Aumenta el padding para más espacio interno */
         display: flex;
         align-items: center;
@@ -59,15 +58,6 @@
         margin-bottom: 10px; /* Espacio inferior para cada campo */
     }
 
-    button[type="submit"] {
-        padding: 10px 20px; /* Aumenta el padding para que el botón sea más grande */
-        background-color: #4CAF50;
-        color: white;
-        border: none;
-        border-radius: 5px;
-        cursor: pointer;
-    }
-
     /* Estilo de la tabla */
     table {
         width: 100%;
@@ -83,26 +73,9 @@
     }
 
     th {
-        background-color: #FFCD00;
+        background-color: #F7C367;
         color: black;
     }
-
-    /* Botones de acción debajo de la tabla */
-    .action-buttons {
-        margin-top: 30px; /* Más espacio superior para separar de la tabla */
-        display: flex;
-        justify-content: center;
-        gap: 20px; /* Espacio horizontal entre los botones */
-    }
-
-        .action-buttons button {
-            background-color: #007BFF;
-            color: white;
-            padding: 10px 20px;
-            border-radius: 5px;
-            cursor: pointer;
-            border: none;
-        }
 
     /* Fondo difuso */
     .modal-background {
@@ -146,12 +119,68 @@
             .confirmation button:hover {
                 background-color: #0f2460;
             }
+
+
+    /* Botones */
+
+
+
+    /* Botones de acción debajo de la tabla */
+    .action-buttons {
+        margin-top: 30px; /* Más espacio superior para separar de la tabla */
+        display: flex;
+        justify-content: center;
+        gap: 20px; /* Espacio horizontal entre los botones */
+    }
+
+        .action-buttons button {
+            background-color: #B0C0CD;
+            color: black;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            border: none;
+        }
+
+    .btn-primary {
+        background-color: #B0C0CD;
+        border-color: #B0C0CD;
+        color: black;
+        font-weight: bold;
+        margin-right: 5px;
+    }
+
+        .btn-primary:hover {
+            background-color: #003d80; /* Azul oscuro */
+            border-color: #003d80;
+            color: white;
+        }
+
+    .btn-secondary {
+        background-color: #B0C0CD;
+        border-color: #B0C0CD;
+        color: black;
+        font-weight: bold;
+        transition: background-color 0.3s ease;
+    }
+
+        .btn-secondary:hover {
+            background-color: #003d80; /* Azul oscuro */
+            border-color: #003d80;
+            color: white;
+        }
+
+    button[type="submit"], button[type="reset"] {
+        padding: 10px 20px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+    }
 </style>
 
 <div class="consulta-venta-container">
     <!-- Encabezado con logo y texto "Consultar Ventas" -->
     <div class="header-container">
-        <img src="~/Content/dist/img/TodoEnUno_SinFondo.png" alt="Logo imagen" class="logo-image" />
 
         <h2>CONSULTAR VENTAS</h2>
     </div>
@@ -169,7 +198,7 @@
         <input type="text" id="valorBusqueda" name="valorBusqueda" placeholder="Ingrese criterio de búsqueda" />
         <input type="date" id="valorFecha" name="valorFecha" style="display: none;" />
 
-        <button type="submit">Buscar</button>
+        <button type="submit" class="btn-primary">Buscar</button>
     </form>
 
 
@@ -275,8 +304,8 @@
 
     <!-- Botones de acción -->
     <div class="action-buttons">
-        <button onclick="window.location.href='@Url.Action("ConsultarVentas", "Ventas")'">Cancelar</button>
-        <button onclick="window.location.href='@Url.Action("VerProductos", "Ventas")'">Ver productos</button>
+        <button type="reset" onclick="window.location.href='@Url.Action("ConsultarVentas", "Ventas")'" class="btn-secondary">Cancelar</button>
+        <button type="button" onclick="window.location.href='@Url.Action("VerProductos", "Ventas")'" class="btn-primary">Ver productos</button>
     </div>
 </div>
 

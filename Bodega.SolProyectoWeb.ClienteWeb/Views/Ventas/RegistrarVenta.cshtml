@@ -7,7 +7,7 @@
 <div class="registro-venta-container" ; padding: 20px; display: flex; align-items: center;">
     <!-- Encabezado con logo y texto "Registrar Venta" -->
     <div class="header-container">
-        <img src="~/Content/dist/img/TodoEnUno_SinFondo.png" alt="Logo imagen" class="logo-image" />
+
         <h2>REGISTRAR VENTA</h2>
     </div>
 
@@ -97,7 +97,7 @@
         </div>
 
         <div class="form-group">
-            <input type="submit" value="Registrar" class="btn btn-success" onclick="enviarPedidos(); redirigirVista();" />
+            <input type="submit" value="Registrar" class="btn btn-primary" onclick="enviarPedidos(); redirigirVista();" />
             <button type="button" class="btn btn-secondary" onclick="cancelarRegistro()">Cancelar</button>
         </div>
 
@@ -107,7 +107,8 @@
 <!-- Modal de confirmación -->
 <div class="modal-background" id="modal-confirmacion" style="display: none;">
     <div class="confirmation">
-        <p>@ViewBag.MensajeExitoso</p>
+        <!--->@ViewBag.MensajeExitoso</p>-->
+        <p>Venta registrada con éxito</p>
         <button onclick="cerrarModal()">Aceptar</button>
     </div>
 </div>
@@ -375,7 +376,7 @@
     }
 
     .header-container {
-        background-color: #ffcd00;
+        background-color: #F7C367;
         padding: 10px;
         display: flex;
         align-items: center;
@@ -384,6 +385,14 @@
         color: #333;
         position: relative;
         margin-bottom: 20px;
+    }
+
+    h2 {
+        background-color: #F7C367;
+        padding: 10px;
+        text-align: center;
+        color: #333;
+        border-radius: 8px;
     }
 
         .header-container h2 {
@@ -417,6 +426,7 @@
     }
 
     .confirmation {
+        color: black;
         background: white;
         padding: 30px;
         border-radius: 10px;
@@ -445,14 +455,6 @@
                 background-color: #0f2460;
             }
 
-    h2 {
-        background-color: #ffcd00;
-        padding: 10px;
-        text-align: center;
-        color: #333;
-        border-radius: 8px;
-    }
-
     .form-group label {
         font-weight: bold;
     }
@@ -465,22 +467,40 @@
         margin-bottom: 30px;
     }
 
+    /* Botones */
     .btn-primary {
-        background-color: #007bff;
-        border-color: #007bff;
-        color: white;
+        background-color: #B0C0CD;
+        border-color: #B0C0CD;
+        color: black;
+        font-weight: bold;
         margin-right: 5px;
     }
 
-    .btn-success {
-        background-color: #28a745;
-        border-color: #28a745;
-        color: white;
-    }
+        .btn-primary:hover {
+            background-color: #003d80; /* Azul oscuro */
+            border-color: #003d80;
+            color: white;
+        }
 
     .btn-secondary {
-        background-color: #6c757d;
-        color: white;
+        background-color: #B0C0CD;
+        border-color: #B0C0CD;
+        color: black;
+        font-weight: bold;
+        transition: background-color 0.3s ease;
+    }
+
+        .btn-secondary:hover {
+            background-color: #003d80; /* Azul oscuro */
+            border-color: #003d80;
+            color: white;
+        }
+
+    button[type="submit"], button[type="reset"] {
+        padding: 10px 20px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
     }
 
     .table th, .table td {
@@ -520,17 +540,17 @@
         }
 
         #listaProductos th {
-            background-color: #FFCD00;
+            background-color: #F7C367;
             color: black;
             font-weight: bold;
         }
 
         #listaProductos tbody tr:nth-child(even) {
-            background-color: #f8f9fa;
+            background-color: #F7C367;
         }
 
         #listaProductos tbody tr:hover {
-            background-color: #e2e6ea;
+            background-color: #F7C367;
         }
 
     .scrollable-table {
