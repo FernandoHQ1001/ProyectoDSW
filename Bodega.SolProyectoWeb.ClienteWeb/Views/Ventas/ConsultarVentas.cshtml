@@ -1,0 +1,342 @@
+﻿@model IEnumerable<Bodega.SolProyectoWeb.Entidades.Core.Venta>
+
+@{
+    ViewBag.Title = "ConsultarVentas";
+}
+
+<style>
+    .consulta-venta-container {
+        background: url('/ruta/de/tu/fondo.jpg') center/cover no-repeat;
+        padding: 30px; /* Aumenta el padding para más espacio interno */
+        border-radius: 8px;
+        color: #333;
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+
+    /* Contenedor del encabezado con logo y texto */
+    .header-container {
+        background-color: #ffcd00;
+        padding: 20px; /* Aumenta el padding para más espacio interno */
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 8px;
+        color: #333;
+        position: relative;
+        margin-bottom: 30px; /* Espacio inferior para separar del siguiente elemento */
+    }
+
+        .header-container h2 {
+            margin: 0;
+            font-size: 1.5rem;
+            color: #333;
+            flex-grow: 1;
+            text-align: center;
+        }
+
+    .logo-image {
+        position: absolute;
+        left: 10px;
+        max-width: 150px;
+        height: auto;
+    }
+
+    /* Estilo para el formulario de búsqueda */
+    form {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 20px; /* Espacio horizontal entre los elementos */
+        margin-bottom: 30px; /* Espacio inferior para separar del siguiente elemento */
+    }
+
+    select, input[type="text"], input[type="date"] {
+        padding: 8px;
+        width: 200px;
+        border-radius: 5px;
+        border: 1px solid #ddd;
+        margin-bottom: 10px; /* Espacio inferior para cada campo */
+    }
+
+    button[type="submit"] {
+        padding: 10px 20px; /* Aumenta el padding para que el botón sea más grande */
+        background-color: #4CAF50;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+
+    /* Estilo de la tabla */
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        background-color: rgba(255, 255, 255, 0.9);
+        margin-bottom: 20px; /* Espacio inferior para separar de los botones de acción */
+    }
+
+    th, td {
+        padding: 15px; /* Aumenta el padding para más espacio interno en la tabla */
+        border: 1px solid #ddd;
+        text-align: center;
+    }
+
+    th {
+        background-color: #FFCD00;
+        color: black;
+    }
+
+    /* Botones de acción debajo de la tabla */
+    .action-buttons {
+        margin-top: 30px; /* Más espacio superior para separar de la tabla */
+        display: flex;
+        justify-content: center;
+        gap: 20px; /* Espacio horizontal entre los botones */
+    }
+
+        .action-buttons button {
+            background-color: #007BFF;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            border: none;
+        }
+
+    /* Fondo difuso */
+    .modal-background {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.6);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 1000;
+    }
+
+    .confirmation {
+        background: white;
+        padding: 30px;
+        border-radius: 10px;
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+        width: 400px;
+        text-align: center;
+    }
+
+        .confirmation p {
+            margin-bottom: 20px;
+            font-size: 18px;
+            color: #333;
+        }
+
+        .confirmation button {
+            padding: 10px 20px;
+            background-color: #1D3782;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+            .confirmation button:hover {
+                background-color: #0f2460;
+            }
+</style>
+
+<div class="consulta-venta-container">
+    <!-- Encabezado con logo y texto "Consultar Ventas" -->
+    <div class="header-container">
+        <img src="~/Content/dist/img/TodoEnUno_SinFondo.png" alt="Logo imagen" class="logo-image" />
+
+        <h2>CONSULTAR VENTAS</h2>
+    </div>
+
+    <!-- Formulario de búsqueda -->
+    <form method="post" action="/Ventas/ConsultarVentas" onsubmit="return procesarBusqueda()">
+        <label for="criterioBusqueda" style="font-weight: bold;">Criterio de búsqueda:</label>
+        <select id="criterioBusqueda" name="criterioBusqueda">
+            <option value="">SELECCIONE AQUÍ</option>
+            <option value="DNI">DNI del cliente</option>
+            <option value="Fecha">Fecha</option>
+            <option value="MetodoPago">Método de pago</option>
+        </select>
+
+        <input type="text" id="valorBusqueda" name="valorBusqueda" placeholder="Ingrese criterio de búsqueda" />
+        <input type="date" id="valorFecha" name="valorFecha" style="display: none;" />
+
+        <button type="submit">Buscar</button>
+    </form>
+
+
+    <script>
+        document.getElementById("criterioBusqueda").addEventListener("change", function () {
+            var valorBusqueda = document.getElementById("valorBusqueda");
+            var valorFecha = document.getElementById("valorFecha");
+
+            if (this.value === "Fecha") {
+                valorBusqueda.style.display = "none";
+                valorFecha.style.display = "inline";
+            } else {
+                valorBusqueda.style.display = "inline";
+                valorFecha.style.display = "none";
+            }
+        });
+
+        function procesarBusqueda() {
+            var criterio = document.getElementById("criterioBusqueda").value;
+            var valorBusqueda = document.getElementById("valorBusqueda").value;
+            var valorFecha = document.getElementById("valorFecha").value;
+
+            // se verifica si el criterio está seleccionado pero el valor está vacío
+            if (criterio && !valorBusqueda && criterio !== "Fecha") {
+                mostrarModal();
+                return false;
+            }
+
+            // Para el caso de Fecha, se verifica valorFecha
+            if (criterio === "Fecha" && !valorFecha) {
+                mostrarModal();
+                return false;
+            }
+
+            // Copia la fecha seleccionada al campo de valor de búsqueda si el criterio es Fecha
+            copiarFechaEnValorBusqueda();
+
+            return true; // Permite el envío del formulario si todas las validaciones están bien
+        }
+
+        function copiarFechaEnValorBusqueda() {
+            var criterio = document.getElementById("criterioBusqueda").value;
+            if (criterio === "Fecha") {
+                document.getElementById("valorBusqueda").value = document.getElementById("valorFecha").value;
+            }
+        }
+
+        // Función para redirigir a la página de productos
+        function verProductos() {
+
+            window.location.href = "~/Views/Ventas/VerProductos";
+        }
+
+        function cerrarModal() {
+            document.getElementById("modal-confirmacion").style.display = "none";
+        }
+
+        // Mostrar el modal si no hay resultados en una solicitud POST
+        document.addEventListener("DOMContentLoaded", function () {
+            var hayResultados = @Html.Raw(Json.Encode(ViewBag.HayResultados)); // Obtiene el valor de HayResultados del controlador
+            var isPostRequest = '@ViewContext.HttpContext.Request.HttpMethod' === 'POST'; // Comprueba si la solicitud es POST
+
+            // Solo muestra el modal si es una solicitud POST y no hay resultados
+            if (isPostRequest && !hayResultados) {
+                document.getElementById("modal-confirmacion").style.display = "flex";
+            }
+        });
+    </script>
+
+    <!-- Tabla de resultados -->
+    <table id="tablax">
+        <thead>
+            <tr>
+                <th>Código</th>
+                <th>Cliente (DNI)</th>
+                <th>Fecha</th>
+                <th>Método de Pago</th>
+                <th>Monto Total</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model != null && Model.Any())
+            {
+                foreach (var venta in Model)
+                {
+                    <tr>
+                        <td>@venta.id_venta</td>
+                        <td>@venta.dni_cliente</td>
+                        <td>@venta.fecha.ToString("dd/MM/yyyy")</td>
+                        <td>@venta.nombre_metodo_pago</td>
+                        <td>@venta.monto_total</td>
+                    </tr>
+                }
+            }
+            else
+            {
+                <tr>
+                    <td colspan="5">No se encontraron ventas con los criterios de búsqueda ingresados.</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <!-- Botones de acción -->
+    <div class="action-buttons">
+        <button onclick="window.location.href='@Url.Action("ConsultarVentas", "Ventas")'">Cancelar</button>
+        <button onclick="window.location.href='@Url.Action("VerProductos", "Ventas")'">Ver productos</button>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal-background" id="modal-confirmacion" style="display: none;">
+    <div class="confirmation">
+        <p>No se encontraron ventas con los criterios de búsqueda ingresados.</p>
+        <button onclick="cerrarModal()">Aceptar</button>
+    </div>
+</div>
+
+@section Scripts{
+
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            // Verificar filas en tbody
+            if ($("#tablax tbody tr").length > 1) {
+                $("#tablax").DataTable({
+                    "language": {
+                        "decimal": "",
+                        "emptyTable": "No hay datos disponibles en la tabla",
+                        "info": "Mostrando _START_ a _END_ de _TOTAL_ registros",
+                        "infoEmpty": "Mostrando 0 a 0 de 0 registros",
+                        "infoFiltered": "(filtrado de _MAX_ registros en total)",
+                        "lengthMenu": "Mostrar _MENU_ registros por página",
+                        "loadingRecords": "Cargando...",
+                        "processing": "Procesando...",
+                        "search": "Buscar:",
+                        "zeroRecords": "No se encontraron coincidencias",
+                        "paginate": {
+                            "first": "Primero",
+                            "last": "Último",
+                            "next": "Siguiente",
+                            "previous": "Anterior"
+                        }
+                    },
+                    "pageLength": 10,
+                    "lengthMenu": [5, 10, 20, 30, 40],
+                    "ordering": true,
+                    "searching": false,
+                    "paging": true,
+                    "info": true,
+                    "autoWidth": false
+                });
+            }
+        });
+    </script>
+
+    <style>
+        #tablax th, #tablax td {
+            text-align: center;
+            vertical-align: middle;
+        }
+
+        #tablax th, #tablax td {
+            white-space: nowrap;
+        }
+    </style>
+
+}

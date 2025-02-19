@@ -122,6 +122,7 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\InventarioController.cs" />
+    <Compile Include="Controllers\VentasController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -180,6 +181,9 @@
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Inventario\RegistrarProducto.cshtml" />
     <Content Include="Views\Inventario\ConsultarInventario.cshtml" />
+    <Content Include="Views\Ventas\RegistrarVenta.cshtml" />
+    <Content Include="Views\Ventas\ConsultarVentas.cshtml" />
+    <Content Include="Views\Ventas\VerProductos.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

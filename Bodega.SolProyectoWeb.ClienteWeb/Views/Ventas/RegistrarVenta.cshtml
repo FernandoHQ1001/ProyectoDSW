@@ -1,0 +1,556 @@
+﻿@model Bodega.SolProyectoWeb.Entidades.Core.Venta
+
+@{
+    ViewBag.Title = "RegistrarVenta";
+}
+
+<div class="registro-venta-container" ; padding: 20px; display: flex; align-items: center;">
+    <!-- Encabezado con logo y texto "Registrar Venta" -->
+    <div class="header-container">
+        <img src="~/Content/dist/img/TodoEnUno_SinFondo.png" alt="Logo imagen" class="logo-image" />
+        <h2>REGISTRAR VENTA</h2>
+    </div>
+
+    <form method="post" class="form-horizontal" onsubmit="mostrarModal(event)">
+        @Html.AntiForgeryToken()
+
+        <div id="notificacionError" class="alert alert-danger" style="display: none;">
+            <span id="mensajeError"></span>
+        </div>
+
+
+        <div class="form-group-row">
+            <!-- Campo DNI del cliente -->
+            <div class="form-group">
+                <label>DNI del cliente:</label>
+                @Html.EditorFor(model => model.dni_cliente, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.dni_cliente, "", new { @class = "text-danger" })
+            </div>
+
+            <!-- Campo Método de Pago -->
+            <div class="form-group">
+                <label>Método de Pago:</label>
+                @Html.DropDownListFor(model => model.id_metodo_pago, (SelectList)ViewBag.MetodosDePago, "Seleccione el método de pago", new { @class = "form-control", required = "required" })
+            </div>
+        </div>
+
+        <!-- Campo Fecha -->
+        <div class="form-group">
+            <label for="Fecha">Fecha:</label>
+            <input type="date" id="Fecha" name="fecha" class="form-control" required />
+        </div>
+
+
+        <div class="form-group-row">
+            <!-- Campo Producto -->
+            <div class="form-group">
+                <label>Producto:</label>
+                <select id="Producto" class="form-control" onchange="actualizarPrecio()" required>
+                    <option value="">Seleccione un producto</option>
+                    @foreach (var producto in ViewBag.Productos)
+                    {
+                        <option value="@producto.id_producto" data-precio="@producto.precio">@producto.nombre</option>
+                    }
+                </select>
+            </div>
+
+            <!-- Campo Cantidad -->
+            <div class="form-group">
+                <label>Cantidad:</label>
+                <input type="number" id="Cantidad" min="1" class="form-control" required />
+            </div>
+
+            <!-- Campo Precio -->
+            <div class="form-group">
+                <label>Precio:</label>
+                <input type="text" id="Precio" class="form-control" readonly />
+            </div>
+
+            <div class="form-group">
+                <label>Usuario:</label>
+                @Html.TextBoxFor(m => m.id_usuario, new { @class = "form-control" })
+                @Html.ValidationMessageFor(m => m.id_usuario)
+            </div>
+        </div>
+
+
+        <div class="form-group">
+            <button type="button" class="btn btn-primary" onclick="agregarProducto()">Agregar</button>
+        </div>
+
+        <!-- Tabla de productos seleccionados -->
+        <div class="scrollable-table">
+            <table id="listaProductos" class="table">
+                <thead>
+                    <tr>
+                        <th>Producto</th>
+                        <th>Cantidad</th>
+                        <th>Precio</th>
+                        <th>Subtotal</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Aquí se agregarán los productos con JavaScript -->
+                </tbody>
+            </table>
+        </div>
+
+        <div class="form-group">
+            <input type="submit" value="Registrar" class="btn btn-success" onclick="enviarPedidos(); redirigirVista();" />
+            <button type="button" class="btn btn-secondary" onclick="cancelarRegistro()">Cancelar</button>
+        </div>
+
+    </form>
+</div>
+
+<!-- Modal de confirmación -->
+<div class="modal-background" id="modal-confirmacion" style="display: none;">
+    <div class="confirmation">
+        <p>@ViewBag.MensajeExitoso</p>
+        <button onclick="cerrarModal()">Aceptar</button>
+    </div>
+</div>
+
+<!-- Modal de confirmación de error por falta de stock -->
+<div class="modal-background" id="modal-error-stock" style="display: none;">
+    <div class="confirmation">
+        <p id="mensajeErrorStock">La cantidad del producto solicitado excede a la disponible.</p>
+        <button onclick="cerrarModalError()">Aceptar</button>
+    </div>
+</div>
+
+<!-- Modal de error por falta de campos -->
+<div class="modal-background" id="modal-error-campos" style="display: none;">
+    <div class="confirmation">
+        <p>Por favor, complete todos los campos obligatorios.</p>
+        <button onclick="cerrarModalCampos()">Aceptar</button>
+    </div>
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}
+
+<script>
+
+    let pedidosCounter = 0;
+
+    function mostrarModal(event) {
+        // Simular el registro de la venta (aquí puedes agregar la lógica de envío si es necesario)
+        // Por ahora, mostramos el modal sin redirigir
+        imprimirProductosEnConsola();
+        // Muestra el modal
+        document.getElementById("modal-confirmacion").style.display = "flex";
+    }
+    @if (TempData["RegistroExitoso"] != null && (bool)TempData["RegistroExitoso"])
+    {
+        <text>
+            document.addEventListener("DOMContentLoaded", function() {
+                document.getElementById("modal-confirmacion").style.display = "flex";
+            });
+        </text>
+    }
+
+    document.addEventListener("DOMContentLoaded", function () {
+    // Mostrar el modal de éxito si ViewBag.MensajeExitoso está definido
+    if ("@ViewBag.MensajeExitoso" !== "") {
+        document.getElementById("modal-confirmacion").style.display = "flex";
+    }
+
+    // Mostrar el modal de error si ViewBag.ErrorNombreExistente está definido
+    if ("@ViewBag.ErrorNombreExistente" !== "") {
+        document.getElementById("modal-error-nombre").style.display = "flex";
+    }
+    if ("@ViewBag.ModelStateError" !== "") {
+        document.getElementById("modal-error-campos").style.display = "flex";
+    }
+    document.querySelector("form").addEventListener("submit", function (event) {
+        var producto = document.querySelector("[name='nombre']").value;
+        var precio = document.querySelector("[name='precio']").value;
+        var categoria = document.querySelector("[name='id_categoria']").value;
+        var stock = document.querySelector("[name='stock']").value;
+        var descripcion = document.querySelector("[name='descripcion']").value;
+
+        // Verificar si algún campo obligatorio está vacío
+        if (!producto || !precio || !categoria || !stock || !descripcion) {
+            event.preventDefault(); // Evitar el envío del formulario
+
+            // Mostrar el modal de error por campos faltantes
+            document.getElementById("modal-error-campos").style.display = "flex";
+        }
+    });
+});
+
+    function cerrarModal() {
+        document.getElementById("modal-confirmacion").style.display = "none";
+       window.location.href = '@Url.Action("RegistrarVenta", "Ventas")';
+
+    }
+
+    function cerrarModalError() {
+        document.getElementById("modal-error-stock").style.display = "none";
+    }
+
+    function cerrarModalCampos() {
+        document.getElementById("modal-error-campos").style.display = "none";
+    }
+    function actualizarPrecio() {
+        // Obtener el precio del producto seleccionado en la lista desplegable
+        var productoSelect = document.getElementById("Producto");
+        var precio = productoSelect.options[productoSelect.selectedIndex].getAttribute("data-precio");
+
+        // Mostrar el precio en el campo de precio
+        document.getElementById("Precio").value = precio;
+        document.getElementById("Precio").value = precio;
+
+    }
+
+
+    function verificarStock(productoId, cantidad, callback) {
+        // Limpia cualquier mensaje de error antes de realizar la verificación de stock
+        document.getElementById("notificacionError").style.display = "none";
+        document.getElementById("mensajeError").innerText = "";
+
+        $.ajax({
+            url: '@Url.Action("VerificarStock", "Ventas")',  // Llamada al controlador Ventas y método VerificarStock
+            type: 'GET',
+            data: { idProducto: productoId, cantidad: cantidad },
+            success: function (data) {
+                if (data.success) {
+                    callback(true);  // Si hay suficiente stock, llama a la función de callback con true
+                } else {
+                    // Muestra el mensaje de error si no hay suficiente stock
+                    document.getElementById("mensajeErrorStock").innerText = data.message || "No hay suficiente stock disponible para este producto.";
+                    document.getElementById("modal-error-stock").style.display = "flex";
+                    callback(false);
+                }
+            },
+            error: function () {
+                document.getElementById("mensajeErrorStock").innerText = "Error al verificar el stock.";
+                document.getElementById("modal-error-stock").style.display = "flex";
+                callback(false);
+            }
+        });
+    }
+    function agregarProducto() {
+        var productoSelect = document.getElementById("Producto");
+        var productoNombre = productoSelect.options[productoSelect.selectedIndex].text;
+        var productoId = productoSelect.value;
+        var cantidad = parseInt(document.getElementById("Cantidad").value);
+        var precio = parseFloat(document.getElementById("Precio").value);
+        var subtotal = parseFloat(precio * cantidad);
+
+        // Verificación de valores de entrada
+        if (productoId === "" || cantidad <= 0) {
+            document.getElementById("mensajeError").innerText = "Seleccione un producto y cantidad válidos.";
+            document.getElementById("notificacionError").style.display = "block";
+            return;
+        }
+
+        // Llama a verificarStock y agrega el producto solo si hay stock suficiente
+        verificarStock(productoId, cantidad, function (stockSuficiente) {
+            if (stockSuficiente) {
+                console.log(`Antes de agregar, pedidosCounter = ${pedidosCounter}`);
+                // Oculta el mensaje de error si hay stock suficiente
+                document.getElementById("notificacionError").style.display = "none";
+
+                // Obtener el cuerpo de la tabla
+                var table = document.getElementById("listaProductos").getElementsByTagName("tbody")[0];
+
+                // Crear una nueva fila en la tabla, incluyendo inputs ocultos dentro de la fila
+                var row = `<tr>
+                <td>${productoNombre}</td>
+                <td>${cantidad}</td>
+                <td>${precio.toFixed(2)}</td>
+                <td>${subtotal.toFixed(2)}</td>
+                <td>
+                    <input type="hidden" name="Pedidos[${pedidosCounter}].id_producto" value="${productoId}" />
+                    <input type="hidden" name="Pedidos[${pedidosCounter}].cantidad" value="${cantidad}" />
+                    <input type="hidden" name="Pedidos[${pedidosCounter}].subtotal" value="${subtotal}" />
+                    <button type="button" class="btn btn-danger" onclick="eliminarPedido(this)">
+                        <i class="fas fa-trash"></i> <!-- Asegúrate de incluir Font Awesome o cualquier otro icono que uses -->
+                    </button>
+                </td>
+            </tr>`;
+
+                // Agregar la fila al cuerpo de la tabla
+                table.insertAdjacentHTML('beforeend', row);
+                console.log(`Producto agregado: ID=${productoId}, Cantidad=${cantidad}`);
+                // Incrementar el contador de pedidos
+                pedidosCounter++;
+                console.log(`Después de agregar, pedidosCounter = ${pedidosCounter}`);
+            }
+        });
+    }
+
+
+
+    function cancelarRegistro() {
+        // Borrar todos los campos del formulario
+        document.querySelector("form").reset();
+
+   window.location.href = '@Url.Action("RegistrarVenta", "Ventas")';
+    }
+
+   function eliminarPedido(button) {
+    // Obtener la fila que contiene el botón que fue presionado
+    var row = button.parentNode.parentNode;
+    console.log("Fila a eliminar:", row);
+
+    // Obtener los valores de id_producto y cantidad de los inputs ocultos dentro de la fila
+    const idProducto = parseInt(row.querySelector("input[name*='id_producto']").value);
+    const cantidad = parseInt(row.querySelector("input[name*='cantidad']").value);
+
+    // Llamada AJAX para reponer el stock en el servidor
+    $.ajax({
+        url: '@Url.Action("ReponerStockTemporal", "Ventas")', // Ajusta la ruta según tu configuración
+        type: 'POST',
+        data: { idProducto: idProducto, cantidad: cantidad },
+        success: function (data) {
+            console.log("Respuesta de AJAX:", data);
+
+            if (data.success) {
+                // Si la restauración fue exitosa, eliminar la fila de la tabla
+                row.parentNode.removeChild(row);
+                reordenarIndices();
+                // Decrementar el contador de pedidos (opcional si lo necesitas en otro lugar)
+                pedidosCounter--;
+            } else {
+                console.log("Error en el servidor:", data.message);
+                alert(data.message);
+            }
+        },
+        error: function () {
+            console.log("Error en la llamada AJAX.");
+            alert("Error al intentar reponer el stock.");
+        }
+    });
+    }
+    function reordenarIndices() {
+        const filas = document.querySelectorAll("#listaProductos tbody tr");
+        filas.forEach((fila, index) => {
+            fila.querySelector('input[name*="id_producto"]').setAttribute("name", `Pedidos[${index}].id_producto`);
+            fila.querySelector('input[name*="cantidad"]').setAttribute("name", `Pedidos[${index}].cantidad`);
+            fila.querySelector('input[name*="subtotal"]').setAttribute("name", `Pedidos[${index}].subtotal`);
+        });
+
+        console.log("Índices reordenados:");
+        filas.forEach((fila, index) => {
+            console.log(`Fila ${index}:`);
+            console.log("id_producto:", fila.querySelector('input[name*="id_producto"]').getAttribute("name"));
+            console.log("cantidad:", fila.querySelector('input[name*="cantidad"]').getAttribute("name"));
+            console.log("subtotal:", fila.querySelector('input[name*="subtotal"]').getAttribute("name"));
+        });
+    }
+
+    function imprimirProductosEnConsola() {
+        const filas = document.querySelectorAll("#listaProductos tbody tr");
+        const productos = Array.from(filas).map((fila) => {
+            const id_producto = fila.querySelector('input[name*="id_producto"]').value;
+            const cantidad = fila.querySelector('input[name*="cantidad"]').value;
+            const subtotal = fila.querySelector('input[name*="subtotal"]').value;
+
+            // Validar si algún campo está vacío o incorrecto
+            if (!id_producto || cantidad <= 0 || subtotal <= 0) {
+                console.error(`Error en la fila: id_producto=${id_producto}, cantidad=${cantidad}, subtotal=${subtotal}`);
+            }
+
+            return { id_producto, cantidad, subtotal };
+        });
+        console.log("Lista actual de productos antes de enviar:", productos);
+    }
+
+
+</script>
+
+<style>
+    .registro-venta-container {
+        background: url('/path/to/background.jpg') center/cover no-repeat;
+        padding: 20px;
+        border-radius: 8px;
+        color: #333;
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+
+    .header-container {
+        background-color: #ffcd00;
+        padding: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 8px;
+        color: #333;
+        position: relative;
+        margin-bottom: 20px;
+    }
+
+        .header-container h2 {
+            margin: 0;
+            font-size: 1.5rem;
+            color: #333;
+            flex-grow: 1;
+            text-align: center;
+        }
+
+    .logo-image {
+        position: absolute;
+        left: 10px; /* Fija la imagen a la izquierda del contenedor */
+        max-width: 150px;
+        height: auto;
+    }
+
+
+    /* Fondo difuso */
+    .modal-background {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.6);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 1000;
+    }
+
+    .confirmation {
+        background: white;
+        padding: 30px;
+        border-radius: 10px;
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+        width: 400px;
+        text-align: center;
+    }
+
+        .confirmation p {
+            margin-bottom: 20px;
+            font-size: 18px;
+            color: #333;
+        }
+
+        .confirmation button {
+            padding: 10px 20px;
+            background-color: #1D3782;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+            .confirmation button:hover {
+                background-color: #0f2460;
+            }
+
+    h2 {
+        background-color: #ffcd00;
+        padding: 10px;
+        text-align: center;
+        color: #333;
+        border-radius: 8px;
+    }
+
+    .form-group label {
+        font-weight: bold;
+    }
+
+    .form-group {
+        display: flex; /* Usa Flexbox para alinear el contenido */
+        align-items: center; /* Centra verticalmente los elementos */
+        justify-content: center; /* Centra horizontalmente el contenido */
+        gap: 30px; /* Espacio entre el label y el input */
+        margin-bottom: 30px;
+    }
+
+    .btn-primary {
+        background-color: #007bff;
+        border-color: #007bff;
+        color: white;
+        margin-right: 5px;
+    }
+
+    .btn-success {
+        background-color: #28a745;
+        border-color: #28a745;
+        color: white;
+    }
+
+    .btn-secondary {
+        background-color: #6c757d;
+        color: white;
+    }
+
+    .table th, .table td {
+        text-align: center;
+    }
+
+    .form-group-row {
+        display: flex;
+        justify-content: space-between;
+        gap: 20px; /* Espacio entre los dos campos */
+        margin-bottom: 15px; /* Espacio inferior para separar de otros elementos */
+    }
+
+        .form-group-row .form-group {
+            flex: 1;
+            min-width: 0;
+        }
+
+            .form-group-row .form-group label {
+                font-weight: bold;
+            }
+
+
+    /*Estilos para la tabla*/
+
+    #listaProductos {
+        width: 100%; /* Hacer que la tabla ocupe todo el ancho disponible */
+        border-collapse: collapse;
+        margin-top: 20px; /* Espacio superior para separación */
+    }
+
+        #listaProductos th,
+        #listaProductos td {
+            border: 1px solid #dee2e6;
+            padding: 12px; /* Espaciado interno */
+            text-align: left; /* Alinear texto a la izquierda */
+        }
+
+        #listaProductos th {
+            background-color: #FFCD00;
+            color: black;
+            font-weight: bold;
+        }
+
+        #listaProductos tbody tr:nth-child(even) {
+            background-color: #f8f9fa;
+        }
+
+        #listaProductos tbody tr:hover {
+            background-color: #e2e6ea;
+        }
+
+    .scrollable-table {
+        max-height: 300px; /* Altura máxima de la tabla */
+        overflow-y: auto; /* Habilita el desplazamiento vertical */
+        border: 1px solid #ddd; /* Opcional: añade un borde para distinguir */
+    }
+
+        .scrollable-table table {
+            width: 100%; /* Asegura que la tabla ocupe el ancho completo */
+            border-collapse: collapse;
+        }
+
+        .scrollable-table th, .scrollable-table td {
+            padding: 8px;
+            text-align: left;
+            border-bottom: 1px solid #ddd; /* Opcional: estilo para filas */
+        }
+
+    .subtotal {
+        font-weight: bold;
+    }
+</style>

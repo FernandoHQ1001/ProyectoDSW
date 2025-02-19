@@ -1,0 +1,226 @@
+﻿@{
+    ViewBag.Title = "Ver Productos";
+}
+
+<div class="consulta-venta-container">
+    <!-- Encabezado con logo y texto "Ver Productos" -->
+    <div class="header-container">
+        <img src="~/Content/dist/img/TodoEnUno_SinFondo.png" alt="Logo imagen" class="logo-image" />
+        <h2>VER PRODUCTOS</h2>
+    </div>
+
+    <!-- Formulario de búsqueda -->
+    <form method="post" action="/Ventas/VerProductos" class="search-form">
+        <label for="codigoVenta" style="font-weight: bold;">Código de venta:</label>
+        <input type="text" id="codigoVenta" name="codigoVenta" required class="input-field" />
+        <button type="submit" class="button buscar-button">Buscar</button>
+    </form>
+
+    <!-- Tabla de resultados -->
+    <table class="result-table">
+        <thead>
+            <tr>
+                <th>Código</th>
+                <th>Producto</th>
+                <th>Cantidad</th>
+                <th>Precio</th>
+                <th>Monto</th>
+            </tr>
+        </thead>
+        <tbody>
+
+            @if (Model != null && Model.Count > 0)
+            {
+                foreach (var producto in Model)
+                {
+                    <tr>
+                        <td>@producto.id_producto</td>
+                        <td>@producto.nombre</td>
+                        <td>@producto.cantidad</td>
+                        <td>@producto.precio</td>
+                        <td>@producto.monto</td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+
+    <!-- Botones de acción -->
+    <div class="action-buttons">
+        <button onclick="window.location.href='@Url.Action("VerProductos", "Ventas")'" class="button cancel-button">Cancelar</button>
+        <button onclick="window.location.href='@Url.Action("ConsultarVentas")'" class="button regresar-button">Regresar</button>
+    </div>
+</div>
+
+<!-- Modal de confirmación para "No se encontró la venta" -->
+<div class="modal-background" id="modal-confirmacion" style="display: none;">
+    <div class="confirmation">
+        <p>@ViewBag.MensajeError</p>
+        <button onclick="cerrarModal()">Aceptar</button>
+    </div>
+</div>
+
+<script>
+    // Mostrar el modal si existe un mensaje de error en ViewBag
+    document.addEventListener("DOMContentLoaded", function () {
+        var mensajeError = "@ViewBag.MensajeError"; // Obtener el mensaje de error del servidor
+
+        if (mensajeError) {
+            document.getElementById("modal-confirmacion").style.display = "flex";
+        }
+    });
+
+    function cerrarModal() {
+        document.getElementById("modal-confirmacion").style.display = "none";
+    }
+</script>
+
+
+<style>
+    .consulta-venta-container {
+        background: url('/ruta/de/tu/fondo.jpg') center/cover no-repeat;
+        padding: 30px; /* Aumenta el padding para más espacio interno */
+        border-radius: 8px;
+        color: #333;
+        max-width: 1200px;
+        margin: 0 auto;
+        text-align: center;
+    }
+
+    /* Estilo del encabezado */
+    .header-container {
+        background-color: #ffcd00;
+        padding: 20px; /* Aumenta el padding para más espacio interno */
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 8px;
+        color: #333;
+        position: relative;
+        margin-bottom: 30px; /* Mayor espacio inferior */
+    }
+
+        .header-container h2 {
+            margin: 0;
+            font-size: 1.5rem;
+            color: #333;
+            flex-grow: 1;
+            text-align: center;
+        }
+
+    .logo-image {
+        position: absolute;
+        left: 10px; /* Fija la imagen a la izquierda del contenedor */
+        max-width: 150px;
+        height: auto;
+    }
+
+    /* Estilo para el formulario de búsqueda */
+    .search-form {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 15px; /* Espacio entre los elementos del formulario */
+        margin-bottom: 30px; /* Mayor espacio inferior para separar del siguiente elemento */
+    }
+
+    .input-field {
+        padding: 10px; /* Aumenta el padding para mejorar el tamaño del campo */
+        width: 200px;
+        border-radius: 5px;
+        border: 1px solid #ddd;
+        text-align: center;
+    }
+
+    .button {
+        padding: 10px 20px; /* Aumenta el padding para hacer los botones más grandes */
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        color: white;
+    }
+
+    .buscar-button {
+        background-color: #4CAF50;
+    }
+
+    /* Estilo de la tabla */
+    .result-table {
+        width: 100%;
+        border-collapse: collapse;
+        background-color: rgba(255, 255, 255, 0.9);
+        margin-top: 20px;
+        margin-bottom: 20px; /* Espacio inferior adicional para separar de los botones de acción */
+    }
+
+        .result-table th, .result-table td {
+            padding: 15px; /* Aumenta el padding en las celdas */
+            border: 1px solid #ddd;
+            text-align: center;
+        }
+
+        .result-table th {
+            background-color: #FFCD00;
+            color: black;
+        }
+
+    /* Estilo de los botones de acción */
+    .action-buttons {
+        margin-top: 30px; /* Más espacio superior para separar de la tabla */
+        display: flex;
+        justify-content: center;
+        gap: 20px; /* Espacio horizontal entre los botones */
+    }
+
+    .cancel-button {
+        background-color: #007bff;
+    }
+
+    .regresar-button {
+        background-color: #007bff;
+    }
+
+    /* Modal */
+    .modal-background {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.6);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 1000;
+    }
+
+    .confirmation {
+        background: white;
+        padding: 30px;
+        border-radius: 10px;
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+        width: 400px;
+        text-align: center;
+    }
+
+        .confirmation p {
+            margin-bottom: 20px;
+            font-size: 18px;
+            color: #333;
+        }
+
+        .confirmation button {
+            padding: 10px 20px;
+            background-color: #1D3782;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+            .confirmation button:hover {
+                background-color: #0f2460;
+            }
+</style>
+

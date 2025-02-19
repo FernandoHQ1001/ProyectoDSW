@@ -47,7 +47,10 @@
     <Compile Include="Base\BaseLN.cs" />
     <Compile Include="Class1.cs" />
     <Compile Include="Core\Categoria.cs" />
+    <Compile Include="Core\MetodoDePago.cs" />
+    <Compile Include="Core\Pedido.cs" />
     <Compile Include="Core\Producto.cs" />
+    <Compile Include="Core\Venta.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
