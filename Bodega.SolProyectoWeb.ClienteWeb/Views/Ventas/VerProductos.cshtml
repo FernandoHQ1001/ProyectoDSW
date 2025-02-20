@@ -5,7 +5,6 @@
 <div class="consulta-venta-container">
     <!-- Encabezado con logo y texto "Ver Productos" -->
     <div class="header-container">
-        <img src="~/Content/dist/img/TodoEnUno_SinFondo.png" alt="Logo imagen" class="logo-image" />
         <h2>VER PRODUCTOS</h2>
     </div>
 
@@ -13,7 +12,7 @@
     <form method="post" action="/Ventas/VerProductos" class="search-form">
         <label for="codigoVenta" style="font-weight: bold;">Código de venta:</label>
         <input type="text" id="codigoVenta" name="codigoVenta" required class="input-field" />
-        <button type="submit" class="button buscar-button">Buscar</button>
+        <button type="submit" class="btn-primary">Buscar</button>
     </form>
 
     <!-- Tabla de resultados -->
@@ -47,8 +46,8 @@
 
     <!-- Botones de acción -->
     <div class="action-buttons">
-        <button onclick="window.location.href='@Url.Action("VerProductos", "Ventas")'" class="button cancel-button">Cancelar</button>
-        <button onclick="window.location.href='@Url.Action("ConsultarVentas")'" class="button regresar-button">Regresar</button>
+        <button type="reset" onclick="window.location.href='@Url.Action("VerProductos", "Ventas")'" class="btn-primary">Cancelar</button>
+        <button type="reset"onclick="window.location.href='@Url.Action("ConsultarVentas")'" class="btn-secondary">Regresar</button>
     </div>
 </div>
 
@@ -89,7 +88,7 @@
 
     /* Estilo del encabezado */
     .header-container {
-        background-color: #ffcd00;
+        background-color: #F7C367;
         padding: 20px; /* Aumenta el padding para más espacio interno */
         display: flex;
         align-items: center;
@@ -160,7 +159,7 @@
         }
 
         .result-table th {
-            background-color: #FFCD00;
+            background-color: #F7C367;
             color: black;
         }
 
@@ -178,6 +177,43 @@
 
     .regresar-button {
         background-color: #007bff;
+    }
+
+
+    /* Botones */
+    .btn-primary {
+        background-color: #B0C0CD;
+        border-color: #B0C0CD;
+        color: black;
+        font-weight: bold;
+        margin-right: 5px;
+    }
+
+        .btn-primary:hover {
+            background-color: #003d80; /* Azul oscuro */
+            border-color: #003d80;
+            color: white;
+        }
+
+    .btn-secondary {
+        background-color: #B0C0CD;
+        border-color: #B0C0CD;
+        color: black;
+        font-weight: bold;
+        transition: background-color 0.3s ease;
+    }
+
+        .btn-secondary:hover {
+            background-color: #003d80; /* Azul oscuro */
+            border-color: #003d80;
+            color: white;
+        }
+
+    button[type="submit"], button[type="reset"] {
+        padding: 10px 20px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
     }
 
     /* Modal */
