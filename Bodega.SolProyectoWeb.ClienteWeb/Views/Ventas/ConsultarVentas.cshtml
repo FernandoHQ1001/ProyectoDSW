@@ -4,180 +4,6 @@
     ViewBag.Title = "ConsultarVentas";
 }
 
-<style>
-    .consulta-venta-container {
-        padding: 30px; /* Aumenta el padding para más espacio interno */
-        border-radius: 8px;
-        color: #333;
-        max-width: 1200px;
-        margin: 0 auto;
-    }
-
-    /* Contenedor del encabezado con logo y texto */
-    .header-container {
-        background-color: #F7C367;
-        padding: 20px; /* Aumenta el padding para más espacio interno */
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        border-radius: 8px;
-        color: #333;
-        position: relative;
-        margin-bottom: 30px; /* Espacio inferior para separar del siguiente elemento */
-    }
-
-        .header-container h2 {
-            margin: 0;
-            font-size: 1.5rem;
-            color: #333;
-            flex-grow: 1;
-            text-align: center;
-        }
-
-    .logo-image {
-        position: absolute;
-        left: 10px;
-        max-width: 150px;
-        height: auto;
-    }
-
-    /* Estilo para el formulario de búsqueda */
-    form {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 20px; /* Espacio horizontal entre los elementos */
-        margin-bottom: 30px; /* Espacio inferior para separar del siguiente elemento */
-    }
-
-    select, input[type="text"], input[type="date"] {
-        padding: 8px;
-        width: 200px;
-        border-radius: 5px;
-        border: 1px solid #ddd;
-        margin-bottom: 10px; /* Espacio inferior para cada campo */
-    }
-
-    /* Estilo de la tabla */
-    table {
-        width: 100%;
-        border-collapse: collapse;
-        background-color: rgba(255, 255, 255, 0.9);
-        margin-bottom: 20px; /* Espacio inferior para separar de los botones de acción */
-    }
-
-    th, td {
-        padding: 15px; /* Aumenta el padding para más espacio interno en la tabla */
-        border: 1px solid #ddd;
-        text-align: center;
-    }
-
-    th {
-        background-color: #F7C367;
-        color: black;
-    }
-
-    /* Fondo difuso */
-    .modal-background {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background-color: rgba(0, 0, 0, 0.6);
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        z-index: 1000;
-    }
-
-    .confirmation {
-        background: white;
-        padding: 30px;
-        border-radius: 10px;
-        box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
-        width: 400px;
-        text-align: center;
-    }
-
-        .confirmation p {
-            margin-bottom: 20px;
-            font-size: 18px;
-            color: #333;
-        }
-
-        .confirmation button {
-            padding: 10px 20px;
-            background-color: #1D3782;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 16px;
-        }
-
-            .confirmation button:hover {
-                background-color: #0f2460;
-            }
-
-
-    /* Botones */
-
-
-
-    /* Botones de acción debajo de la tabla */
-    .action-buttons {
-        margin-top: 30px; /* Más espacio superior para separar de la tabla */
-        display: flex;
-        justify-content: center;
-        gap: 20px; /* Espacio horizontal entre los botones */
-    }
-
-        .action-buttons button {
-            background-color: #B0C0CD;
-            color: black;
-            padding: 10px 20px;
-            border-radius: 5px;
-            cursor: pointer;
-            border: none;
-        }
-
-    .btn-primary {
-        background-color: #B0C0CD;
-        border-color: #B0C0CD;
-        color: black;
-        font-weight: bold;
-        margin-right: 5px;
-    }
-
-        .btn-primary:hover {
-            background-color: #003d80; /* Azul oscuro */
-            border-color: #003d80;
-            color: white;
-        }
-
-    .btn-secondary {
-        background-color: #B0C0CD;
-        border-color: #B0C0CD;
-        color: black;
-        font-weight: bold;
-        transition: background-color 0.3s ease;
-    }
-
-        .btn-secondary:hover {
-            background-color: #003d80; /* Azul oscuro */
-            border-color: #003d80;
-            color: white;
-        }
-
-    button[type="submit"], button[type="reset"] {
-        padding: 10px 20px;
-        border: none;
-        border-radius: 5px;
-        cursor: pointer;
-    }
-</style>
-
 <div class="consulta-venta-container">
     <!-- Encabezado con logo y texto "Consultar Ventas" -->
     <div class="header-container">
@@ -325,6 +151,178 @@
 
         #tablax th, #tablax td {
             white-space: nowrap;
+        }
+    </style>
+
+    <style>
+        .consulta-venta-container {
+            padding: 30px; /* Aumenta el padding para más espacio interno */
+            border-radius: 8px;
+            color: #333;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* Contenedor del encabezado con logo y texto */
+        .header-container {
+            background-color: #F7C367;
+            padding: 20px; /* Aumenta el padding para más espacio interno */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 8px;
+            color: #333;
+            position: relative;
+            margin-bottom: 30px; /* Espacio inferior para separar del siguiente elemento */
+        }
+
+        .header-container h2 {
+            margin: 0;
+            font-size: 1.5rem;
+            color: #333;
+            flex-grow: 1;
+            text-align: center;
+        }
+
+        .logo-image {
+            position: absolute;
+            left: 10px;
+            max-width: 150px;
+            height: auto;
+        }
+
+        /* Estilo para el formulario de búsqueda */
+        form {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 20px; /* Espacio horizontal entre los elementos */
+            margin-bottom: 30px; /* Espacio inferior para separar del siguiente elemento */
+        }
+
+        select, input[type="text"], input[type="date"] {
+            padding: 8px;
+            width: 200px;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+            margin-bottom: 10px; /* Espacio inferior para cada campo */
+        }
+
+        /* Estilo de la tabla */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: rgba(255, 255, 255, 0.9);
+            margin-bottom: 20px; /* Espacio inferior para separar de los botones de acción */
+        }
+
+        th, td {
+            padding: 15px; /* Aumenta el padding para más espacio interno en la tabla */
+            border: 1px solid #ddd;
+            text-align: center;
+        }
+
+        th {
+            background-color: #F7C367;
+            color: black;
+        }
+
+        /* Fondo difuso */
+        .modal-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.6);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .confirmation {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            width: 400px;
+            text-align: center;
+        }
+
+        .confirmation p {
+            margin-bottom: 20px;
+            font-size: 18px;
+            color: #333;
+        }
+
+        .confirmation button {
+            padding: 10px 20px;
+            background-color: #1D3782;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .confirmation button:hover {
+            background-color: #0f2460;
+        }
+
+
+        /* Botones */
+
+        /* Botones de acción debajo de la tabla */
+        .action-buttons {
+            margin-top: 30px; /* Más espacio superior para separar de la tabla */
+            display: flex;
+            justify-content: center;
+            gap: 20px; /* Espacio horizontal entre los botones */
+        }
+
+        .action-buttons button {
+            background-color: #B0C0CD;
+            color: black;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            border: none;
+        }
+
+        .btn-primary {
+            background-color: #B0C0CD;
+            border-color: #B0C0CD;
+            color: black;
+            font-weight: bold;
+            margin-right: 5px;
+        }
+
+        .btn-primary:hover {
+            background-color: #003d80; /* Azul oscuro */
+            border-color: #003d80;
+            color: white;
+        }
+
+        .btn-secondary {
+            background-color: #B0C0CD;
+            border-color: #B0C0CD;
+            color: black;
+            font-weight: bold;
+            transition: background-color 0.3s ease;
+        }
+
+       .btn-secondary:hover {
+            background-color: #003d80; /* Azul oscuro */
+            border-color: #003d80;
+            color: white;
+       }
+
+        button[type="submit"], button[type="reset"] {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
         }
     </style>
 
