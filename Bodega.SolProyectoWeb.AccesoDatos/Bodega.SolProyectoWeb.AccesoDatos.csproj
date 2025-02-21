@@ -45,6 +45,7 @@
     <Compile Include="Class1.cs" />
     <Compile Include="Core\CategoriaDA.cs" />
     <Compile Include="Core\ProductoDA.cs" />
+    <Compile Include="Core\UsuarioDA.cs" />
     <Compile Include="Core\VentaDA.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

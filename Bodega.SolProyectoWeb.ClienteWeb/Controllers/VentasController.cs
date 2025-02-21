@@ -10,6 +10,7 @@ using System.Web.Mvc;
 
 namespace Bodega.SolProyectoWeb.ClienteWeb.Controllers
 {
+    [AuthorizeCargo("Encargado de ventas")]
     public class VentasController : Controller
     {
         private VentaLN ventaLN = new VentaLN();
@@ -35,6 +36,17 @@ namespace Bodega.SolProyectoWeb.ClienteWeb.Controllers
             }
             if (ModelState.IsValid && pedidos != null && pedidos.Any())
             {
+                Usuario usuarioActual = Session["Usuario"] as Usuario;
+
+                if (usuarioActual != null)
+                {
+                    venta.id_usuario = usuarioActual.id_usuario;
+                    System.Diagnostics.Debug.WriteLine("ID del usuario actual: " + venta.id_usuario);
+                }
+                else
+                {
+                    System.Diagnostics.Debug.WriteLine("El usuario actual es nulo. Revisa la sesión.");
+                }
 
                 int idVenta = ventaLN.RegistrarVenta(venta, pedidos);
                 // Verificar que la venta fue registrada correctamente

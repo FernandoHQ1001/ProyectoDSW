@@ -13,6 +13,56 @@ namespace Bodega.SolProyectoWeb.AccesoDatos.Core
 {
     public class ProductoDA
     {
+        public void ModificarProducto(Producto producto)
+        {
+            string connectionString = ConfigurationManager.ConnectionStrings["cnnSql"].ConnectionString;
+
+            using (SqlConnection con = new SqlConnection(connectionString))
+            {
+                try
+                {
+                    SqlCommand cmd = new SqlCommand("modificarProducto", con);
+                    cmd.CommandType = CommandType.StoredProcedure;
+
+                    cmd.Parameters.AddWithValue("@id_producto", producto.id_producto);
+                    cmd.Parameters.AddWithValue("@nombre", producto.nombre);
+                    cmd.Parameters.AddWithValue("@stock", producto.stock);
+                    cmd.Parameters.AddWithValue("@precio", producto.precio);
+                    cmd.Parameters.AddWithValue("@descripcion", producto.descripcion);
+                    cmd.Parameters.AddWithValue("@id_categoria", producto.id_categoria);
+
+                    con.Open();
+                    cmd.ExecuteNonQuery();
+                }
+                catch (Exception)
+                {
+                    throw;
+                }
+            }
+        }
+
+        public void EliminarProducto(int id_producto)
+        {
+            string connectionString = ConfigurationManager.ConnectionStrings["cnnSql"].ConnectionString;
+
+            using (SqlConnection con = new SqlConnection(connectionString))
+            {
+                try
+                {
+                    SqlCommand cmd = new SqlCommand("eliminarProducto", con);
+                    cmd.CommandType = CommandType.StoredProcedure;
+
+                    cmd.Parameters.AddWithValue("@id_producto", id_producto);
+
+                    con.Open();
+                    cmd.ExecuteNonQuery();
+                }
+                catch (Exception)
+                {
+                    throw;
+                }
+            }
+        }
         public Producto BuscarProducto(int id_producto)
         {
             Producto producto = null;

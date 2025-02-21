@@ -1,0 +1,117 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Todo en Uno - Login</title>
+    <link rel="stylesheet" href="https://unpkg.com/ionicons@5.5.2/dist/ionicons.js">
+    <style>
+        :root {
+            --primary-bg: hsl(213deg 85% 97%);
+            --secondary-bg: hsl(233deg 36% 38%);
+            --font-color: hsl(0deg 0% 30%);
+            --input-bg: hsl(0deg 0% 98%);
+            --shadow: rgba(0, 0, 0, 0.1);
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            margin: 0;
+            height: 100vh;
+            background-image: url('../../content/dist/img/fondo_login.jpg');
+            background-size: cover;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1;
+        }
+
+        .screen-1 {
+            background: rgba(62, 77, 136, 0.9);
+            padding: 20px 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1.5em;
+            border-radius: 20px;
+            box-shadow: 0 0 1em var(--shadow);
+            color: white;
+            max-width: 320px;
+            width: 100%;
+            z-index: 10;
+        }
+
+        .title {
+            text-align: center;
+            font-size: 1.5em;
+            font-weight: bold;
+            margin-bottom: 0.5em;
+        }
+
+        .logo {
+            padding-top: 15px;
+            width: 120px;
+            height: auto;
+            margin-top: -1em;
+        }
+
+        .usuario, .contraseña {
+            background: var(--input-bg);
+            padding: 1em;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5em;
+            border-radius: 20px;
+            color: var(--font-color);
+            box-shadow: 0 0 1em var(--shadow);
+            width: 90%;
+            max-width: 400px;
+            margin: 0 auto 1em;
+        }
+
+            .usuario input, .contraseña input {
+                outline: none;
+                border: none;
+                width: 100%;
+                padding: 0.5em;
+            }
+
+        .login {
+            padding: 1em;
+            background: #ffca66;
+            color: white;
+            border: none;
+            border-radius: 30px;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 1em;
+        }
+
+            .login:hover {
+                background-color: #2e3c6b;
+            }
+    </style>
+</head>
+<body>
+    <div class="overlay"></div>
+
+    <div class="screen-1">
+        <img src="~/Content/dist/img/TodoEnUno_SinFondo.png" alt="Logo" class="logo" />
+        <div class="title">Todo en Uno</div>
+
+        @RenderBody()
+    </div>
+</body>
+</html>

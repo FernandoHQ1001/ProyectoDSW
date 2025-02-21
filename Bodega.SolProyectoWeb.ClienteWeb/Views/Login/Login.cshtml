@@ -1,0 +1,30 @@
+﻿
+@{
+    ViewBag.Title = "Login";
+    Layout = "~/Views/Shared/_LayoutLogin.cshtml";
+}
+
+<form action="@Url.Action("Login","Login")" method="post" id="loginForm">
+    <div class="form-item usuario">
+        <label for="username" class="formLabel">Usuario</label>
+        <input type="text" name="correo" id="username" class="form-style" placeholder="Ingrese su usuario" autocomplete="off" />
+    </div>
+
+    <div class="form-item contraseña">
+        <label for="password" class="formLabel">Contraseña</label>
+        <input type="password" name="contrasena" id="password" class="form-style" placeholder="Ingrese su contraseña" autocomplete="off" />
+        <ion-icon name="eye-outline" class="show-hide"></ion-icon>
+    </div>
+
+    <!-- Aquí va el bloque if para el mensaje de error -->
+    @if (ViewData["Mensaje"] != null)
+    {
+        <div class="alert alert-danger" role="alert" style="text-align:center;">
+            @ViewData["Mensaje"]
+        </div>
+    }
+
+    <!-- Botón de envío del formulario -->
+    <button type="submit" class="login pull-right">Iniciar sesión</button>
+</form>
+

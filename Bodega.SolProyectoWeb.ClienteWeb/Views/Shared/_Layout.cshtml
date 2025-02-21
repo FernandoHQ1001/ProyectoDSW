@@ -1,41 +1,369 @@
-﻿<!DOCTYPE html>
-<html>
+﻿@using Bodega.SolProyectoWeb.Entidades.Core;
+@{
+    // Obtener el usuario actual de la sesión
+    Usuario usuarioActual = Session["Usuario"] as Usuario;
+
+    // Si el usuarioActual es null, establece el nombre como "desconocido"
+    string nombreUsuario = usuarioActual?.nombre ?? "Desconocido";
+    string cargo = usuarioActual?.cargo;
+    // Definir variables para identificar el cargo del usuario
+    var isEncargadoVentas = usuarioActual?.cargo == "Encargado de ventas";
+    var isEncargadoInventario = usuarioActual?.cargo == "Encargado de inventario";
+    var isAdministrador = usuarioActual?.cargo == "Administrador";
+}
+<!DOCTYPE html>
+<html lang="es">
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@ViewBag.Title - Mi aplicación ASP.NET</title>
-    @Styles.Render("~/Content/css")
-    @Scripts.Render("~/bundles/modernizr")
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewBag.Title</title>
+
+    <!-- Incluye los archivos CSS para Bootstrap -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet" />
+    <link rel="stylesheet"
+          href="https://cdn.datatables.net/2.1.8/css/dataTables.dataTables.min.css" />
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.datatables.net/2.1.8/js/dataTables.min.js"></script>
+
+
+    <!-- Estilos personalizados -->
+    <style>
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Estilo general del sidebar */
+        .sidebar {
+            height: 100vh;
+            background-color: #212529; /* Fondo oscuro */
+            padding-top: 20px;
+            color: white;
+            width: 250px;
+            font-family: 'Arial', sans-serif;
+        }
+
+        /* Para que el área de contenido no se sobreponga al sidebar */
+        .content-wrapper {
+            margin-left: 80px; /* Ajuste para que el contenido se coloque correctamente a la derecha del sidebar */
+            padding: 20px;
+            width: calc(100% - 250px); /* El contenido ocupará el 100% de la pantalla menos el ancho del sidebar */
+            overflow-x: hidden; /* Evitar el desbordamiento horizontal */
+        }
+
+            .sidebar ul {
+                padding-left: 0; /* Remueve el padding predeterminado */
+                list-style: none; /* Elimina los puntos de lista */
+            }
+
+            .sidebar .submenu a {
+                padding-left: 30px; /* Sangría específica para submenús */
+                font-size: 14px; /* Tamaño más pequeño para submenús */
+            }
+
+            .sidebar ul.collapse {
+                padding-left: 0;
+            }
+
+            /* Remueve espacios adicionales entre submenús */
+            .sidebar .submenu ul {
+                margin: 0;
+                padding: 0;
+            }
+
+            .sidebar .submenu > a {
+                padding-left: 15px; /* Mantén alineación del enlace principal */
+            }
+
+            .sidebar a:hover {
+                background-color: #495057; /* Resalta tanto padre como submenú */
+            }
+
+            .sidebar a {
+                color: #d1d1d1; /* Texto gris claro */
+                text-decoration: none;
+                display: block;
+                padding: 10px 15px;
+                font-size: 15px;
+                border-left: 4px solid transparent; /* Indicador */
+                transition: background-color 0.3s, border-left-color 0.3s;
+            }
+
+
+                .sidebar a.active {
+                    background-color: #495057; /* Resaltado gris */
+                    color: white;
+                    border-left-color: #ffc107; /* Indicador amarillo */
+                }
+
+        .submenu a {
+            font-size: 14px;
+            padding-left: 30px;
+        }
+
+        .user-info {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+            .user-info img {
+                width: 60px;
+                border-radius: 50%;
+                margin-bottom: 10px;
+            }
+
+            .user-info h6 {
+                font-size: 16px;
+                margin: 5px 0;
+            }
+
+            .user-info p {
+                font-size: 13px;
+                color: #adb5bd; /* Texto más claro */
+            }
+        /* Barra de navegación superior */
+        .navbar {
+            background-color: #343a40; /* Fondo oscuro */
+            padding: 5px 15px; /* Reducir el padding para hacer la barra más delgada */
+        }
+
+        .navbar-brand {
+            color: #ffc107; /* Amarillo */
+            font-size: 16px; /* Tamaño de fuente reducido */
+            font-weight: bold;
+        }
+
+        .navbar a {
+            color: #d1d1d1; /* Texto claro */
+            transition: color 0.3s;
+            font-size: 14px; /* Tamaño de fuente más pequeño */
+            padding: 5px 10px; /* Reducir el espacio alrededor de los enlaces */
+        }
+
+            .navbar a:hover {
+                color: #ffc107; /* Amarillo */
+            }
+
+
+        /* Corrección para diseño responsivo */
+        html, body {
+            height: 100%;
+            margin: 0;
+        }
+
+        .d-flex {
+            display: flex;
+            flex-wrap: nowrap; /* Evita que los elementos se desborden */
+            width: 100%;
+        }
+
+        /*.sidebar {
+            height: 100vh;
+            background-color: #263783;/ / Azul */
+        /*padding-top: 20px;
+            color: white;
+            width: 250px;
+        }
+
+            .sidebar a {
+                color: white;
+                text-decoration: none;
+                display: block;
+                padding: 10px;
+                font-size: 16px;
+            }
+
+                .sidebar a:hover {
+                    background-color: #263783;
+                }
+
+        .submenu a {
+            font-size: 14px;
+            padding-left: 30px;
+        }
+
+        .content-wrapper {
+            margin-left: 0px;
+            padding: 15px;
+            width: 100%;
+        }
+
+        .navbar {
+            background-color: #007bff;
+        }
+
+            .navbar a {
+                color: white;
+            }
+
+                .navbar a:hover {
+                    color: #fff;
+                }
+
+        .user-info {
+            margin-top: 20px;
+            color: white;
+            text-align: center;
+        }
+
+            .user-info img {
+                width: 50px;
+                border-radius: 50%;
+            }
+
+            .user-info h6 {
+                margin-top: 10px;
+            }
+
+        html, body {
+            height: 100%;
+            margin: 0;
+        }
+
+        .d-flex {
+            min-height: 100vh;
+        }*/
+        /Correcion responsive sidebar/
+        /*.sidebar {
+            height: auto;
+            min-height: 100%;
+            background-color: #263783;
+        }*/
+    </style>
 </head>
+
 <body>
-    <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark bg-dark">
-        <div class="container">
-            @Html.ActionLink("Nombre de la aplicación", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
-            <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" title="Alternar navegación" aria-controls="navbarSupportedContent"
-                    aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse d-sm-inline-flex justify-content-between">
-                <ul class="navbar-nav flex-grow-1">
-                    <li>@Html.ActionLink("Registrar Producto", "RegistrarProducto", "Inventario", new { area = "" }, new { @class = "nav-link" })</li>
-                    <li>@Html.ActionLink("Consultar Inventario", "ConsultarInventario", "Inventario", new { area = "" }, new { @class = "nav-link" })</li>
-                    <li>@Html.ActionLink("Registrar Venta", "RegistrarVenta", "Ventas", new { area = "" }, new { @class = "nav-link" })</li>
-                    <li>@Html.ActionLink("Consultar Ventas", "ConsultarVentas", "Ventas", new { area = "" }, new { @class = "nav-link" })</li>
+    <!-- Barra de navegación superior -->
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <a class="navbar-brand" href="#">
+            <img src="~/Content/dist/img/TodoEnUno_SinFondo.png" alt="Logo TodoEnUno" class="logo-image" style="height: 40px;" />
+        </a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item active">
+                    <a class="nav-link" href="@Url.Action("Index", "Home")">Inicio</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+
+    <!-- Contenedor principal -->
+    <div class="d-flex">
+        <!-- Menú lateral -->
+        <div class="sidebar">
+            <div class="container">
+                <!-- Información del usuario -->
+                <div class="user-info">
+                    <p>@cargo</p>
+                    @if (isEncargadoInventario)
+                    {
+                        <!-- Ícono para encargado de inventario -->
+                        <i class="fas fa-box" style="font-size: 60px; color: #007bff;"></i>
+                    }
+                    else if (isEncargadoVentas)
+                    {
+                        <!-- Ícono para encargado de ventas -->
+                        <i class="fas fa-shopping-cart" style="font-size: 60px; color: #28a745;"></i>
+                    }
+                    else if (isAdministrador)
+                    {
+                        <!-- Ícono para administrador -->
+                        <i class="fas fa-user-cog" style="font-size: 60px; color: #ffc107;"></i>
+                    }
+                    else
+                    {
+                        <!-- Ícono por defecto (usuario) -->
+                        <i class="fas fa-user" style="font-size: 60px; color: #6c757d;"></i>
+                    }
+                    <h6>@nombreUsuario</h6>
+                </div>
+
+
+                <h5 class="text-white">Menú</h5>
+                <ul class="list-unstyled">
+                    <!-- Solo se muestra opciones si el usuario está logueado -->
+
+                    @if (isAdministrador)
+                    {
+                        <li><a href="@Url.Action("Index", "Home")"><i class="fas fa-tachometer-alt"></i> Inicio</a></li>
+                        <li class="submenu">
+                            <a href="javascript:void(0);" class="collapsed" data-toggle="collapse" data-target="#usuariosSubMenu" aria-expanded="false">
+                                <i class="fas fa-users"></i> Usuarios
+                            </a>
+                            <ul id="usuariosSubMenu" class="list-unstyled collapse">
+                                <li><a href="@Url.Action("Index","MantenerUsuario")"><i class="fas fa-user-plus"></i> Mantener Usuario</a></li>
+                                <li><a href="@Url.Action("Index", "CambiarContrasena")"><i class="fas fa-key"></i> Cambiar Contraseña</a></li>
+                            </ul>
+                        </li>
+                    }
+                    else if (isEncargadoVentas)
+                    {
+                        <li><a href="@Url.Action("Index", "Home")"><i class="fas fa-tachometer-alt"></i> Inicio</a></li>
+
+                        <a href="javascript:void(0);" class="collapsed" data-toggle="collapse" data-target="#ventasSubMenu" aria-expanded="false">
+                            <i class="fas fa-cash-register"></i> Ventas
+                        </a>
+                        <li class="submenu">
+                            <ul id="ventasSubMenu" class="list-unstyled collapse">
+                                <li><a href="@Url.Action("RegistrarVenta", "Ventas")"><i class="fas fa-plus-circle"></i> Registrar Venta</a></li>
+                                <li><a href="@Url.Action("ConsultarVentas", "Ventas")"><i class="fas fa-search"></i> Consultar Venta</a></li>
+                            </ul>
+                        </li>
+                    }
+                    else if (isEncargadoInventario)
+                    {
+                        <li>
+                            <a href="@Url.Action("Index", "Home")">
+                                <i class="fas fa-tachometer-alt"></i> Inicio
+                            </a>
+                        </li>
+                        <li class="submenu">
+                            <a href="javascript:void(0);" class="collapsed" data-toggle="collapse" data-target="#inventarioSubMenu" aria-expanded="false">
+                                <i class="fas fa-box"></i> Inventario
+                            </a>
+                            <ul id="inventarioSubMenu" class="list-unstyled collapse">
+                                <li>
+                                    <a href="@Url.Action("RegistrarProducto", "Inventario")">
+                                        <i class="fas fa-box-open"></i> Registrar Producto
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="@Url.Action("ActualizarProducto", "Inventario")">
+                                        <i class="fas fa-edit"></i> Actualizar Producto
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="@Url.Action("ConsultarInventario", "Inventario")">
+                                        <i class="fas fa-search"></i> Consultar Inventario
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+
+                    }
+
+                    <!-- Cerrar sesión para todos -->
+                    <hr style="border-top: 1px solid #6c757d; margin: 10px 0;" />
+                    <li><a href="@Url.Action("Logout", "Login")"><i class="fas fa-sign-out-alt"></i> Cerrar sesión</a></li>
+
                 </ul>
             </div>
         </div>
-    </nav>
-    <div class="container body-content">
-        @RenderBody()
-        <hr />
-        <footer>
-            <p>&copy; @DateTime.Now.Year - Mi aplicación ASP.NET</p>
-        </footer>
+
+        <!-- Área de contenido -->
+        <div class="content-wrapper">
+            @RenderBody()
+            @RenderSection("Scripts", required: false)
+        </div>
     </div>
 
-    @Scripts.Render("~/bundles/jquery")
-    @Scripts.Render("~/bundles/bootstrap")
-    @RenderSection("scripts", required: false)
+    <!-- Scripts -->
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

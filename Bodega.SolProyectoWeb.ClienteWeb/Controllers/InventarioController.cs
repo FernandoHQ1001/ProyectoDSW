@@ -8,84 +8,123 @@ using System.Web.Mvc;
 
 namespace Bodega.SolProyectoWeb.ClienteWeb.Controllers
 {
+    [AuthorizeCargo("Encargado de inventario")]
     public class InventarioController : Controller
     {
-        // GET: Inventario
-        public ActionResult Index()
+        // GET: Inventario/ActualizarProducto/5
+        public ActionResult ActualizarProducto()
         {
-            return View();
+            Producto producto = new Producto();
+
+            // Obtener las categorías desde la base de datos
+            var categorias = new CategoriaLN().ListarCategorias();
+
+            // Pasar las categorías a la vista
+            ViewBag.Categorias = categorias;
+
+            return View(producto);
         }
 
-        // GET: Inventario/Details/5
-        public ActionResult Details(int id)
-        {
-            return View();
-        }
-
-        // GET: Inventario/Create
-        public ActionResult Create()
-        {
-            return View();
-        }
-
-        // POST: Inventario/Create
+        // POST: Inventario/CargarProducto
         [HttpPost]
-        public ActionResult Create(FormCollection collection)
+        public ActionResult CargarProducto(string nombre)
+        {
+            // Validar si se ingreso un nombre
+            if (string.IsNullOrEmpty(nombre))
+            {
+                TempData["Message"] = "Debe ingresar el nombre del producto que desea buscar.";
+                TempData["MessageType"] = "warning"; // Advertencia
+                return RedirectToAction("ActualizarProducto");
+            }
+
+            Producto producto = new ProductoLN().BuscarProductoPorNombre(nombre);
+
+
+            // Obtener las categorías 
+            var categorias = new CategoriaLN().ListarCategorias();
+            ViewBag.Categorias = categorias;
+
+            if (producto != null)
+            {
+                return View("ActualizarProducto", producto);
+            }
+            else
+            {
+                TempData["Message"] = "No se encontró un producto que coincida con el código de producto ingresado.";
+                TempData["MessageType"] = "error"; // Error
+                ViewBag.ProductoNoEncontrado = true;
+                return View("ActualizarProducto", new Producto());
+            }
+        }
+
+        // POST: Inventario/ActualizarProducto/5
+        [HttpPost]
+        public ActionResult ActualizarProducto(Producto producto)
         {
             try
             {
-                // TODO: Add insert logic here
+                if (ModelState.IsValid)
+                {
+                    new ProductoLN().ModificarProducto(producto);
+                    ViewBag.ActualizacionExitosa = true;
 
-                return RedirectToAction("Index");
+                    TempData["Message"] = "La actualización del producto se realizo con éxito.";
+                    TempData["MessageType"] = "success"; // Éxito
+
+                    return RedirectToAction("ActualizarProducto");
+                }
+
+                var categorias = new CategoriaLN().ListarCategorias();
+                ViewBag.Categorias = categorias;
+
+                TempData["Message"] = "Hay errores en el formulario. Por favor corrígelos.";
+                TempData["MessageType"] = "error"; // Error
+
+                return View(producto);
             }
             catch
             {
-                return View();
+                var categorias = new CategoriaLN().ListarCategorias();
+                ViewBag.Categorias = categorias;
+                TempData["Message"] = "Ingrese y cargue el producto a actualizar.";
+                TempData["MessageType"] = "error"; // Error
+                return View(producto);
             }
         }
 
-        // GET: Inventario/Edit/5
-        public ActionResult Edit(int id)
-        {
-            return View();
-        }
-
-        // POST: Inventario/Edit/5
+        // POST: Inventario/EliminarProducto
         [HttpPost]
-        public ActionResult Edit(int id, FormCollection collection)
+        public ActionResult EliminarProducto(int id_producto)
         {
+            if (id_producto == 0)
+            {
+
+                TempData["Message"] = "Ingrese el producto a eliminar.";
+                TempData["MessageType"] = "error"; // Error
+                return RedirectToAction("ActualizarProducto");
+            }
+
             try
             {
-                // TODO: Add update logic here
+                var producto = new ProductoLN().BuscarProducto(id_producto);
 
-                return RedirectToAction("Index");
+                if (producto == null)
+                {
+                    TempData["Message"] = "El producto que intentas eliminar no existe.";
+                    TempData["MessageType"] = "warning"; // Advertencia
+                    return RedirectToAction("ActualizarProducto");
+                }
+                new ProductoLN().EliminarProducto(id_producto);
+                TempData["Message"] = "La eliminación del producto se realizó con éxito";
+                TempData["MessageType"] = "success"; // Éxito
             }
             catch
             {
-                return View();
+                TempData["Message"] = "Ocurrió un error al intentar eliminar el producto.";
+                TempData["MessageType"] = "error"; // Error
             }
-        }
 
-        // GET: Inventario/Delete/5
-        public ActionResult Delete(int id)
-        {
-            return View();
-        }
-
-        // POST: Inventario/Delete/5
-        [HttpPost]
-        public ActionResult Delete(int id, FormCollection collection)
-        {
-            try
-            {
-                // TODO: Add delete logic here
-
-                return RedirectToAction("Index");
-            }
-            catch
-            {
-                return View();
-            }
+            return RedirectToAction("ActualizarProducto");
         }
 
         public ActionResult RegistrarProducto()
@@ -99,6 +138,14 @@ namespace Bodega.SolProyectoWeb.ClienteWeb.Controllers
         [HttpPost]
         public ActionResult RegistrarProducto(Producto producto)
         {
+            var usuario = (Usuario)Session["Usuario"];
+            if (usuario == null)
+            {
+                return RedirectToAction("Login", "Login", new { mensaje = "Debes iniciar sesión para registrar productos." });
+            }
+            System.Diagnostics.Debug.WriteLine(($"ID Usuario desde la sesión: {usuario.id_usuario}"));
+            producto.id_usuario = usuario.id_usuario;
+
 
             if (string.IsNullOrEmpty(producto.nombre) || producto.precio == 0 || string.IsNullOrEmpty(producto.id_categoria.ToString()) || producto.stock == 0 || string.IsNullOrEmpty(producto.descripcion))
             {

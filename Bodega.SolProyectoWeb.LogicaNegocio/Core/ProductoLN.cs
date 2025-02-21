@@ -14,6 +14,16 @@ namespace Bodega.SolProyectoWeb.LogicaNegocio.Core
 {
     public class ProductoLN : BaseLN
     {
+        public void ModificarProducto(Producto producto)
+        {
+            new ProductoDA().ModificarProducto(producto);
+        }
+
+        public void EliminarProducto(int idProducto)
+        {
+            new ProductoDA().EliminarProducto(idProducto);
+        }
+
         public Producto BuscarProducto(int id)
         {
             return new ProductoDA().BuscarProducto(id);

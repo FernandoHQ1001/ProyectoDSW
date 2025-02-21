@@ -50,6 +50,7 @@
     <Compile Include="Core\MetodoDePago.cs" />
     <Compile Include="Core\Pedido.cs" />
     <Compile Include="Core\Producto.cs" />
+    <Compile Include="Core\Usuario.cs" />
     <Compile Include="Core\Venta.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
