@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Security.Claims;
+using System.Security.Cryptography;
 
 namespace Bodega.SolProyectoWeb.AccesoDatos.Core
 {
@@ -15,6 +16,9 @@ namespace Bodega.SolProyectoWeb.AccesoDatos.Core
     {
         public void InsertarUsuario(Usuario usuario)
         {
+            // Codificar la contraseña antes de insertarla en la base de datos
+            usuario.contrasena = ConvertirSha256(usuario.contrasena);
+
             string connectionString = ConfigurationManager.ConnectionStrings["cnnSql"].ConnectionString;
 
             using (SqlConnection con = new SqlConnection(connectionString))
@@ -246,6 +250,20 @@ namespace Bodega.SolProyectoWeb.AccesoDatos.Core
             }
         }
 
+        // Método para codificar la contraseña en SHA256
+        public static string ConvertirSha256(string texto)
+        {
+            StringBuilder Sb = new StringBuilder();
+            using (SHA256 hash = SHA256Managed.Create())
+            {
+                Encoding enc = Encoding.UTF8;
+                byte[] result = hash.ComputeHash(enc.GetBytes(texto));
+
+                foreach (byte b in result)
+                    Sb.Append(b.ToString("x2"));
+            }
+            return Sb.ToString();
+        }
 
     }
 }
