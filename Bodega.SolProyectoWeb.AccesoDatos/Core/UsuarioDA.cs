@@ -16,6 +16,7 @@ namespace Bodega.SolProyectoWeb.AccesoDatos.Core
     {
         public void InsertarUsuario(Usuario usuario)
         {
+
             // Codificar la contraseña antes de insertarla en la base de datos
             usuario.contrasena = ConvertirSha256(usuario.contrasena);
 
