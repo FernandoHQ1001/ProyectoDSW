@@ -42,7 +42,7 @@ namespace Bodega.SolProyectoWeb.AccesoDatos.Core
             }
         }
 
-        public void ModificarUsuario(Usuario usuario)
+        public void ModificarUsuario(int IdUsuario, Usuario usuario)
         {
             string connectionString = ConfigurationManager.ConnectionStrings["cnnSql"].ConnectionString;
 
@@ -53,7 +53,7 @@ namespace Bodega.SolProyectoWeb.AccesoDatos.Core
                     SqlCommand cmd = new SqlCommand("modificarUsuario", con);
                     cmd.CommandType = CommandType.StoredProcedure;
 
-                    cmd.Parameters.AddWithValue("@id_usuario", usuario.id_usuario);
+                    cmd.Parameters.AddWithValue("@id_usuario", IdUsuario);
                     cmd.Parameters.AddWithValue("@nombre", usuario.nombre);
                     cmd.Parameters.AddWithValue("@apellido", usuario.apellido);
                     cmd.Parameters.AddWithValue("@telefono", usuario.telefono);

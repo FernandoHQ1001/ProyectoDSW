@@ -1,0 +1,342 @@
+﻿@model Bodega.SolProyectoWeb.Entidades.Core.Usuario
+
+@{
+    ViewBag.Title = "ModificarUsuario";
+}
+
+<div class="modificar-usuario-container">
+
+    <div class="header-container">
+        <img src="~/Content/dist/img/TodoEnUno_SinFondo.png" alt="Logo imagen" class="logo-image" />
+        <h2>MODIFICAR USUARIO</h2>
+    </div>
+
+    @using (Html.BeginForm("BuscarUsuarioModificar", "Usuarios", FormMethod.Post))
+    {
+        @Html.AntiForgeryToken()
+
+        <div class="form-section">
+            <div class="form-group row">
+                <label for="dni" class="col-md-2 col-form-label">DNI:</label>
+                <div class="col-md-3">
+                    <input type="text" class="form-control" id="dni" name="dni" />
+                </div>
+                <div class="col-md-2">
+                    <button type="submit" class="btn btn-light">Buscar</button>
+                </div>
+            </div>
+        </div>
+    }
+
+    @using (Html.BeginForm("ModificarUsuario", "Usuarios", FormMethod.Post))
+    {
+        @Html.AntiForgeryToken()
+
+        <input type="hidden" name="id_usuario" value="@Model.id_usuario" />
+
+        <div class="form-group main">
+            <div class="user-info text-center">
+                <img src="~/Content/dist/img/usuario.png" />
+                <div class="user-id">
+                    Usuario
+                </div>
+            </div>
+
+            <div class="form-group information-section">
+                <div class="form-group row">
+                    <label for="nombre" class="col-md-2 col-form-label">Nombres:</label>
+                    <div class="col-md-4">
+                        @Html.EditorFor(model => model.nombre, new { htmlAttributes = new { @class = "form-control" } })
+                    </div>
+                    <label for="dni" class="col-md-2 col-form-label">DNI:</label>
+                    <div class="col-md-4">
+
+                        @Html.EditorFor(model => model.dni, new { htmlAttributes = new { @class = "form-control" } })
+
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label for="apellido" class="col-md-2 col-form-label">Apellidos:</label>
+                    <div class="col-md-4">
+                        @Html.EditorFor(model => model.apellido, new { htmlAttributes = new { @class = "form-control" } })
+                    </div>
+                    <label for="correo" class="col-md-2 col-form-label">Correo:</label>
+                    <div class="col-md-4">
+                        @Html.EditorFor(model => model.correo, new { htmlAttributes = new { @class = "form-control" } })
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label for="telefono" class="col-md-2 col-form-label">Teléfono:</label>
+                    <div class="col-md-4">
+                        @Html.EditorFor(model => model.telefono, new { htmlAttributes = new { @class = "form-control" } })
+                    </div>
+                    <label for="cargo" class="col-md-2 col-form-label">Cargo:</label>
+                    <div class="col-md-4">
+                        <select class="form-control" name="cargo" id="cargo">
+                            <option value="">Seleccione aquí</option>
+                            <option value="Encargado de inventario" @(Model.cargo == "Encargado de inventario" ? "selected" : "")>Encargado de inventario</option>
+                            <option value="Encargado de ventas" @(Model.cargo == "Encargado de ventas" ? "selected" : "")>Encargado de ventas</option>
+                            <option value="Administrador" @(Model.cargo == "Administrador" ? "selected" : "")>Administrador</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="buttons text-center mt-4">
+            <button type="submit" class="btn btn-primary">Guardar</button>
+            <a href="@Url.Action("Index", "Usuarios")" class="btn btn-secondary">Regresar</a>
+        </div>
+    }
+</div>
+<!-- Modal de Usuario No Encontrado -->
+@if (ViewBag.UsuarioNoEncontrado != null && (bool)ViewBag.UsuarioNoEncontrado)
+{
+    <div class="modal" tabindex="-1" role="dialog" style="display:block;">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Usuario no encontrado</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="window.location.href='@Url.Action("ModificarUsuario", "MantenerUsuario")'">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p>El usuario con el DNI especificado no existe.</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="window.location.href='@Url.Action("ModificarUsuario", "MantenerUsuario")'">Aceptar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-backdrop fade show" style="z-index: 1040;"></div>
+}
+
+<!-- Modal de Modificación Exitosa -->
+@if (ViewBag.ModificacionExitosa != null && (bool)ViewBag.ModificacionExitosa)
+{
+    <div class="modal" tabindex="-1" role="dialog" style="display:block;">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">¡Modificación exitosa!</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p>El usuario ha sido modificado correctamente.</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="window.location.href='@Url.Action("ModificarUsuario", "MantenerUsuario")'">Aceptar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-backdrop fade show"></div>
+}
+
+
+@if (TempData["MensajeExitoso"] != null)
+{
+    <div class="modal-background" id="modal-confirmacion" style="display: flex;">
+        <div class="confirmation">
+            <p>@TempData["MensajeExitoso"]</p>
+            <button onclick="cerrarModalYRedirigir('@Url.Action("ModificarUsuario", "MantenerUsuario")')">Aceptar</button>
+        </div>
+    </div>
+}
+
+@if (TempData["Error"] != null)
+{
+    <div class="modal-background" id="modal-error" style="display: flex;">
+        <div class="confirmation">
+            <p>@TempData["Error"]</p>
+            <button onclick="cerrarModal()">Aceptar</button>
+        </div>
+    </div>
+}
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}
+
+<script>
+    document.getElementById("dni").addEventListener("input", function () {
+        if (this.value.length > 8) {
+            this.value = this.value.slice(0, 8); // Limitar a 8 caracteres
+        }
+    });
+    function cerrarModalYRedirigir(url) {
+        const modal = document.getElementById("modal-confirmacion");
+        if (modal) {
+            modal.style.display = "none"; // Oculta el modal
+        }
+        window.location.href = url; // Redirige a la URL proporcionada
+    }
+
+    function cerrarModal() {
+        const modal = document.getElementById("modal-error");
+        if (modal) {
+            modal.style.display = "none"; // Oculta el modal
+        }
+    }
+</script>
+
+<style>
+    .modificar-usuario-container {
+        background: url('/path/to/background.jpg') center/cover no-repeat;
+        padding: 20px;
+        border-radius: 8px;
+        color: #333;
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+
+    .header-container {
+        background-color: #ffcd00;
+        padding: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 8px;
+        color: #333;
+        position: relative;
+        margin-bottom: 20px;
+    }
+
+        .header-container h2 {
+            margin: 0;
+            font-size: 1.5rem;
+            color: #333;
+            flex-grow: 1;
+            text-align: center;
+        }
+
+    .logo-image {
+        position: absolute;
+        left: 10px; /* Fija la imagen a la izquierda del contenedor */
+        max-width: 150px;
+        height: auto;
+    }
+
+
+    h2 {
+        background-color: #ffcd00;
+        padding: 10px;
+        text-align: center;
+        color: #333;
+        border-radius: 8px;
+    }
+
+    .form-group label {
+        font-weight: bold;
+    }
+
+    .header h2 {
+        font-weight: bold;
+        font-size: 24px;
+    }
+
+    .form-section {
+        flex-direction: column;
+        gap: 15px;
+        margin-top: 30px;
+    }
+
+    .form-group.main {
+        display: flex;
+        justify-content: center;
+    }
+
+    .form-group.information-section {
+        padding: 25px;
+    }
+
+    .form-group.row {
+        padding: 15px;
+        align-items: center;
+        margin-bottom: 10px;
+        justify-content: center;
+    }
+
+    .col-form-label {
+        font-weight: bold;
+    }
+
+    .user-info {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin-top: 15px;
+        margin-bottom: 15px;
+        margin-right: 25px;
+        justify-content: center;
+    }
+
+    .buttons {
+        display: flex;
+        justify-content: center;
+        gap: 10px;
+    }
+
+    .btn-primary {
+        background-color: #007BFF;
+        border-color: #007BFF;
+    }
+
+    .btn-secondary {
+        background-color: #6c757d;
+        border-color: #6c757d;
+    }
+
+    .btn-primary, .btn-secondary {
+        width: 200px;
+        margin-left: 30px;
+        margin-right: 30px;
+    }
+
+    /* Modal de éxito y no encontrado */
+    .modal-background {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 1000;
+    }
+
+    .confirmation {
+        background: white;
+        padding: 30px;
+        border-radius: 10px;
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+        width: 400px;
+        text-align: center;
+    }
+
+        .confirmation p {
+            margin-bottom: 20px;
+            font-size: 18px;
+        }
+
+        .confirmation button {
+            padding: 10px 20px;
+            background-color: #1d3782;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+            .confirmation button:hover {
+                background-color: #0f2460;
+            }
+</style>

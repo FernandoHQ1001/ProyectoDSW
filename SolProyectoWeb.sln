@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.12.35707.178 d17.12
+VisualStudioVersion = 17.12.35707.178
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "01 BackEnd", "01 BackEnd", "{68D6DD5D-1C16-4C94-B7E5-96A6F6003C26}"
 EndProject
@@ -20,6 +20,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bodega.SolProyectoWeb.Utiles", "Bodega.SolProyectoWeb.Utiles\Bodega.SolProyectoWeb.Utiles.csproj", "{98F236FF-A6E3-46FA-9743-275F5AD0AAB2}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bodega.SolProyectoWeb.UtilesWeb", "Bodega.SolProyectoWeb.UtilesWeb\Bodega.SolProyectoWeb.UtilesWeb.csproj", "{1D782369-4242-4122-A240-02D9FAFD83D0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebServicesBodega", "WebServicesBodega\WebServicesBodega.csproj", "{E50CE95D-C979-44B0-98AE-D22D557F58D3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -51,6 +53,10 @@ Global
 		{1D782369-4242-4122-A240-02D9FAFD83D0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1D782369-4242-4122-A240-02D9FAFD83D0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1D782369-4242-4122-A240-02D9FAFD83D0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E50CE95D-C979-44B0-98AE-D22D557F58D3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E50CE95D-C979-44B0-98AE-D22D557F58D3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E50CE95D-C979-44B0-98AE-D22D557F58D3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E50CE95D-C979-44B0-98AE-D22D557F58D3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

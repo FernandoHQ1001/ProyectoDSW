@@ -1,0 +1,135 @@
+﻿@{
+    ViewBag.Title = "Index";
+}
+
+<div class="mantener-usuario-container">
+
+    <div class="header-container">
+        <img src="~/Content/dist/img/TodoEnUno_SinFondo.png" alt="Logo imagen" class="logo-image" />
+        <h2>MANTENER USUARIO</h2>
+    </div>
+
+    <div class="main-container">
+        <div class="user-details">
+            <img src="~/Content/dist/img/usuario_redondo.png" class="user-img" />
+        </div>
+        <div class="user-options">
+            <div class="user-options row">
+                <button type="button" onclick="window.location.href='@Url.Action("RegistrarUsuario", "Usuarios")'">Registrar Usuario</button>
+            </div>
+            <div class="user-options row">
+                <button type="button" onclick="window.location.href='@Url.Action("ModificarUsuario", "Usuarios")'">Modificar Usuario</button>
+            </div>
+            <div class="user-options row">
+                <button type="button" onclick="window.location.href='@Url.Action("EliminarUsuario", "Usuarios")'">Eliminar Usuario</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .mantener-usuario-container {
+        background: url('/path/to/background.jpg') center/cover no-repeat;
+        padding: 20px;
+        border-radius: 8px;
+        color: #333;
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+
+    .header-container {
+        background-color: #ffcd00;
+        padding: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 8px;
+        color: #333;
+        position: relative;
+        margin-bottom: 20px;
+    }
+
+        .header-container h2 {
+            margin: 0;
+            font-size: 1.5rem;
+            color: #333;
+            flex-grow: 1;
+            text-align: center;
+        }
+
+    .logo-image {
+        position: absolute;
+        left: 10px; /* Fija la imagen a la izquierda del contenedor */
+        max-width: 150px;
+        height: auto;
+    }
+
+    .user-img {
+        border-radius: 50%;
+        width: 200px;
+        height: 200px;
+    }
+
+    h2 {
+        background-color: #ffcd00;
+        padding: 10px;
+        text-align: center;
+        color: #333;
+        border-radius: 8px;
+    }
+
+    .form-group label {
+        font-weight: bold;
+    }
+
+    .form-group {
+        display: flex; /* Usa Flexbox para alinear el contenido */
+        align-items: center; /* Centra verticalmente los elementos */
+        justify-content: center; /* Centra horizontalmente el contenido */
+        gap: 30px; /* Espacio entre el label y el input */
+        margin-bottom: 30px;
+    }
+
+    .header h2 {
+        font-weight: bold;
+        font-size: 24px;
+        text-align: center;
+        background-color: #FFC107;
+        padding: 15px;
+        margin-bottom: 20px;
+        border-radius: 5px;
+    }
+
+    .main-container {
+        display: flex;
+        justify-content: center;
+    }
+
+    .user-details {
+        padding: 120px 70px;
+    }
+
+    .user-options {
+        margin-top: 60px;
+        flex: 1;
+    }
+
+        .user-options .row {
+            padding: 20px;
+            margin: 20px 140px;
+        }
+
+    button {
+        border-radius: 10px;
+        background-color: #97b6c6;
+        border: none;
+        font-weight: bold;
+        height: 40px;
+        width: 100%; /* Hace que los botones ocupen todo el ancho del contenedor */
+    }
+
+        button:hover {
+            background-color: #4d4b4b;
+            transition: 0.3s;
+        }
+</style>

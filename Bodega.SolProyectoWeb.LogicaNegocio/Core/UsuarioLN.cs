@@ -16,6 +16,7 @@ namespace Bodega.SolProyectoWeb.LogicaNegocio.Core
     {
         public void InsertarUsuario(Usuario usuario)
         {
+            System.Diagnostics.Debug.WriteLine("Usuario registrado (LN): " + usuario.nombre + " - DNI: " + usuario.dni);
             if (usuario.dni.Length != 8 || !usuario.dni.All(char.IsDigit))
             {
                 throw new ArgumentException("El DNI debe tener exactamente 8 dígitos numéricos.");
@@ -23,13 +24,13 @@ namespace Bodega.SolProyectoWeb.LogicaNegocio.Core
             new UsuarioDA().InsertarUsuario(usuario);
         }
 
-        public void ModificarUsuario(Usuario usuario)
+        public void ModificarUsuario(int IdUsuario, Usuario usuario)
         {
             if (usuario.dni.Length != 8 || !usuario.dni.All(char.IsDigit))
             {
                 throw new ArgumentException("El DNI debe tener exactamente 8 dígitos numéricos.");
             }
-            new UsuarioDA().ModificarUsuario(usuario);
+            new UsuarioDA().ModificarUsuario(IdUsuario, usuario);
         }
 
         public void EliminarUsuario(int idUsuario)
