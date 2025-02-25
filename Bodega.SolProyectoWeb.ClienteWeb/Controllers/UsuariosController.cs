@@ -41,8 +41,6 @@ namespace Bodega.SolProyectoWeb.ClienteWeb.Controllers
         [HttpPost]
         public ActionResult RegistrarUsuario(Usuario usuario)
         {
-            System.Diagnostics.Debug.WriteLine("Usuario registrado (controlador): " + usuario.nombre + " - DNI: " + usuario.dni);
-            System.Diagnostics.Debug.WriteLine("Usuario registrado (controlador): " + usuario.id_usuario + " - DNI: " + usuario.apellido);
             string controladora = "Usuarios";
             try
             {
@@ -53,25 +51,18 @@ namespace Bodega.SolProyectoWeb.ClienteWeb.Controllers
 
                     //establece el tipo de dato de tranferencia 
                     cliente.Headers[HttpRequestHeader.ContentType] = "application/json";
-                    System.Diagnostics.Debug.WriteLine("Paso el header");
 
                     // Tipo de codificación para caracteres especiales
                     cliente.Encoding = UTF8Encoding.UTF8;
-                    System.Diagnostics.Debug.WriteLine("Paso el UTF");
 
                     // Convierte el objeto de tipo Usuario a una cadena JSON
                     var usuarioJson = JsonConvert.SerializeObject(usuario);
-                    System.Diagnostics.Debug.WriteLine("JSON a enviar: " + usuarioJson);
 
                     string rutacompleta = RutaApi + controladora;
 
-                    System.Diagnostics.Debug.WriteLine(rutacompleta);
-
                     var resultado = cliente.UploadString(new Uri(rutacompleta), "POST", usuarioJson);
 
-                    System.Diagnostics.Debug.WriteLine("Paso el el var resultado");
                 }
-                System.Diagnostics.Debug.WriteLine("Paso el using" );
                 return RedirectToAction("Index");
             }
             catch (Exception ex)
@@ -88,37 +79,7 @@ namespace Bodega.SolProyectoWeb.ClienteWeb.Controllers
             string metodo = "GetUserId";
 
             Usuario users = new Usuario();
-            /*
-            using (WebClient cliente = new WebClient())
-            {
-                cliente.Headers.Clear(); // Borra los encabezados anteriores
 
-                // Establece el tipo de dato de transferencia
-                cliente.Headers[HttpRequestHeader.ContentType] = "application/json"; 
-
-                // Tipo de decodificador para caracteres especiales
-                cliente.Encoding = UTF8Encoding.UTF8;
-
-                // Construye la URL completa para realizar la solicitud GET a la API
-                string rutacompleta = RutaApi + controladora + "?IdUsuario=" + id;
-
-                try
-                {
-                    // Ejecuta la solicitud GET a la API y recibe la respuesta
-                    var data = cliente.DownloadString(new Uri(rutacompleta));
-
-                    // Convierte los datos JSON traídos por la API en un objeto Usuario
-                    users = JsonConvert.DeserializeObject<Usuario>(data);
-                }
-                catch (Exception ex)
-                {
-                    // Maneja cualquier error que pueda ocurrir al hacer la solicitud
-                    ViewBag.ErrorMessage = $"Error al obtener el usuario: {ex.Message}";
-                    return View(); // Retorna la vista con un mensaje de error
-                }
-            }
-
-            */
             return View(users);
         }
 
@@ -127,8 +88,6 @@ namespace Bodega.SolProyectoWeb.ClienteWeb.Controllers
         // [HttpPut] 
         public ActionResult ModificarUsuario( Usuario usuario)
         {
-            System.Diagnostics.Debug.WriteLine("Usuario a modificar (controlador): " + usuario.nombre + " - DNI: " + usuario.dni);
-            System.Diagnostics.Debug.WriteLine("Usuario a modificar (controlador): " + usuario.id_usuario + " - Apellido: " + usuario.apellido);
 
             string controladora = "Usuarios";
 
@@ -141,7 +100,6 @@ namespace Bodega.SolProyectoWeb.ClienteWeb.Controllers
                     client.BaseAddress = new Uri(RutaApi);
 
                     string rutacompleta = $"{RutaApi}{controladora}?IdUsuario={usuario.id_usuario}"; // Define la ruta completa para la solicitud PUT
-                    System.Diagnostics.Debug.WriteLine(rutacompleta);
 
                     // Realiza la solicitud PUT a la API enviando el objeto usuario como JSON
                     var putTask = client.PutAsJsonAsync(rutacompleta, usuario); // Usa el objeto usuario en lugar de collection
@@ -208,23 +166,6 @@ namespace Bodega.SolProyectoWeb.ClienteWeb.Controllers
             string controladora = "Usuarios";
             Usuario users = new Usuario();
 
-            /*
-            using (WebClient cliente = new WebClient())
-            {
-                cliente.Headers[HttpRequestHeader.ContentType] = "application/json"; // Establece el tipo de contenido como JSON
-                cliente.Encoding = UTF8Encoding.UTF8;
-
-                // Construye la URL para obtener los detalles del usuario
-                string url = $"{RutaApi}{controladora}/GetUserId?IdUsuario={id}";
-
-                // Realiza la solicitud GET para obtener los datos del usuario
-                var data = cliente.DownloadString(url);
-
-                // Deserializa el JSON recibido en un objeto Usuario
-                usuario = JsonConvert.DeserializeObject<Usuario>(data);
-            }
-            */
-
             return View(users);
         }
 
@@ -232,8 +173,6 @@ namespace Bodega.SolProyectoWeb.ClienteWeb.Controllers
         [HttpPost]
         public ActionResult EliminarUsuario( Usuario usuario)
         {
-            System.Diagnostics.Debug.WriteLine("Usuario a eliminar (controlador): " + usuario.nombre + " - DNI: " + usuario.dni);
-            System.Diagnostics.Debug.WriteLine("Usuario a eliminar (controlador): " + usuario.id_usuario + " - Apellido: " + usuario.apellido);
 
             string controladora = "Usuarios";
 
@@ -245,8 +184,6 @@ namespace Bodega.SolProyectoWeb.ClienteWeb.Controllers
 
                     // Construye la URL para la solicitud DELETE
                     string url = $"{RutaApi}{controladora}/{usuario.id_usuario}";
-                    System.Diagnostics.Debug.WriteLine(url);
-
 
                     // Realiza la solicitud DELETE a la API para eliminar   al usuario
                     cliente.UploadString(url, "DELETE", string.Empty);  // Utiliza el método "DELETE" con cuerpo vacío
@@ -282,9 +219,7 @@ namespace Bodega.SolProyectoWeb.ClienteWeb.Controllers
                 try
                 {
                     var data = cliente.DownloadString(new Uri(rutacompleta));
-                    System.Diagnostics.Debug.WriteLine("Data: " + data);
                     usuario = JsonConvert.DeserializeObject<Usuario>(data);
-                    System.Diagnostics.Debug.WriteLine("id usuario deserializado: " + usuario.id_usuario);
 
 
                     if (usuario == null)

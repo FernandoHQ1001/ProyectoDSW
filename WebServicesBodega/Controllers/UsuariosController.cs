@@ -28,8 +28,6 @@ namespace WebServicesBodega.Controllers
 
             try
             {
-                //UsuariosLN usuario = new UsuariosLN();
-                //return usuario.BuscaUsuarioId(IdUsuario);
 
                 Usuario usu = new Usuario();
                 UsuarioLN usuario = new UsuarioLN();
@@ -39,8 +37,6 @@ namespace WebServicesBodega.Controllers
             catch (Exception ex)
             {
                 string innerException = (ex.InnerException == null) ? "" : ex.InnerException.ToString();
-                //Logger.paginaNombre = this.GetType().Name; 
-                //Logger.Escribir("Error en Logica de Negocio: " + ex.Message + ". " +ex.StackTrace + ". " + innerException);
                 throw;
             }
         }
@@ -57,9 +53,6 @@ namespace WebServicesBodega.Controllers
 
             try
             {
-                //UsuariosLN usuario = new UsuariosLN();
-                //return usuario.BuscaUsuarioId(IdUsuario);
-
                 Usuario usu = new Usuario();
                 UsuarioLN usuario = new UsuarioLN();
                 usu = usuario.BuscarUsuarioPorDni(dni);
@@ -68,8 +61,6 @@ namespace WebServicesBodega.Controllers
             catch (Exception ex)
             {
                 string innerException = (ex.InnerException == null) ? "" : ex.InnerException.ToString();
-                //Logger.paginaNombre = this.GetType().Name; 
-                //Logger.Escribir("Error en Logica de Negocio: " + ex.Message + ". " +ex.StackTrace + ". " + innerException);
                 throw;
             }
         }
