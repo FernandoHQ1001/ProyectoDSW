@@ -1,0 +1,367 @@
+﻿@model Bodega.SolProyectoWeb.Entidades.Core.Usuario
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<div class="cambiar_contraseña-container">
+    <div class="header-container">
+        <h2>CAMBIAR CONTRASEÑA</h2>
+
+    </div>
+
+
+    @using (Html.BeginForm("CargarUsuario", "CambiarContrasena", FormMethod.Post))
+    {
+        @Html.AntiForgeryToken()
+
+        <div class="form-section">
+            <div class="form-group row">
+                <label for="codigo" class="col-md-2 col-form-label">DNI:</label>
+                <div class="col-md-3">
+                    <input type="text" class="form-control" id="dni" name="dni" />
+                </div>
+                <div class="col-md-2">
+                    <button type="submit" class="btn btn-light">Buscar</button>
+                </div>
+            </div>
+        </div>
+    }
+
+    @using (Html.BeginForm("CambiarContrasena", "CambiarContrasena", FormMethod.Post))
+    {
+        @Html.AntiForgeryToken()
+
+        <input type="hidden" name="id_usuario" id="id_usuario" value="@Model.id_usuario" />
+
+        <div class="form-group main">
+            <div class="user-info2 text-center">
+                <img src="~/Content/dist/img/usuario.png" />
+                <div class="user-id">@Model.id_usuario</div>
+            </div>
+
+            <div class="form-group information-section">
+                <div class="form-group row">
+                    <label for="nombre" class="col-md-4 col-form-label">Nombres:</label>
+                    <div class="col-md-8">
+                        @Html.EditorFor(model => model.nombre, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label for="apellido" class="col-md-4 col-form-label">Apellidos:</label>
+                    <div class="col-md-8">
+                        @Html.EditorFor(model => model.apellido, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label for="contrasenaActual" class="col-md-4 col-form-label">Contraseña:</label>
+                    <div class="col-md-8">
+                        <input type="password" class="form-control" id="contrasenaActual" value="@Model.contrasena" readonly />
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label for="nuevaContrasena" class="col-md-4 col-form-label">Nueva Contraseña:</label>
+                    <div class="col-md-8">
+                        <input type="password" class="form-control" id="nuevaContrasena" name="nuevaContrasena" />
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label for="confirmarContrasena" class="col-md-4 col-form-label">Nueva Contraseña:</label>
+                    <div class="col-md-8">
+                        <input type="password" class="form-control" id="nuevaContrasena" name="nuevaContrasena" />
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="buttons text-center mt-4">
+            <button type="submit" class="btn btn-primary">Cambiar Contraseña</button>
+            <a href="@Url.Action("Index")" class="btn btn-secondary">Regresar</a>
+        </div>
+    }
+</div>
+
+@if (TempData["Message"] != null)
+{
+    <div class="modal-background" id="modal-confirmacion" style="display: flex;">
+        <div class="confirmation">
+            <p>@TempData["Message"]</p>
+            <button onclick="cerrarModal()">Aceptar</button>
+        </div>
+    </div>
+}
+
+
+<script>
+
+    document.addEventListener("DOMContentLoaded", function () {
+        const modal = document.getElementById("modal-confirmacion");
+        if (modal) {
+            modal.style.display = "flex"; // Muestra el modal automáticamente si existe.
+        }
+    });
+
+    function cerrarModal() {
+        const modal = document.getElementById("modal-confirmacion");
+        if (modal) {
+            modal.style.display = "none"; // Oculta el modal al hacer clic en "Aceptar".
+        }
+    }
+
+    $(document).ready(function () {
+            const message = '@Html.Raw(TempData["Message"] ?? "")';
+            const messageType = '@TempData["MessageType"]';
+
+            if (message) {
+                Swal.fire({
+                    title: messageType === "success" ? '¡Éxito!' :
+                           messageType === "error" ? '¡Error!' :
+                           'Información',
+                    text: message,
+                    icon: messageType,
+                    confirmButtonText: 'Aceptar'
+                });
+            }
+        });
+</script>
+
+
+<style>
+    .cambiar_contraseña-container {
+        background: url('/path/to/background.jpg') center/cover no-repeat;
+        padding: 20px;
+        border-radius: 8px;
+        color: #333;
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+
+    .header-container {
+        background-color: #F7C367;
+        padding: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 8px;
+        color: #333;
+        position: relative;
+        margin-bottom: 20px;
+        margin: 0 auto;
+    }
+
+    .header-container h2 {
+        margin: 0;
+        font-size: 1.5rem;
+        color: #333;
+        flex-grow: 1;
+        text-align: center;
+    }
+
+    .logo-image {
+        position: absolute;
+        left: 10px; /* Fija la imagen a la izquierda del contenedor */
+        max-width: 150px;
+        height: auto;
+    }
+
+    .user-img {
+        border-radius: 50%;
+        width: 200px;
+        height: 200px;
+    }
+
+    h2 {
+        background-color: #F7C367;
+        padding: 10px;
+        text-align: center;
+        color: #333;
+        border-radius: 8px;
+    }
+
+    .header h2 {
+        font-weight: bold;
+        font-size: 24px;
+        text-align: center;
+        background-color: #FFC107;
+        padding: 15px;
+        margin-bottom: 20px;
+        border-radius: 5px;
+    }
+
+    .main-container {
+        display: flex;
+        justify-content: center;
+    }
+
+    .user-details {
+        padding: 120px 70px;
+    }
+
+    .form-section {
+        margin-top: 30px;
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    .form-group.main {
+        display: flex;
+        justify-content: center;
+        grid-gap: 30px;
+    }
+
+    .form-group .information-section {
+        margin-left: 35px;
+    }
+
+    .form-group.row {
+        padding: 15px;
+        align-items: center;
+        margin-bottom: 10px;
+        justify-content: center;
+    }
+
+    .col-form-label {
+        font-weight: bold;
+    }
+
+    .user-info2 {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .user-info2 img {
+        border-radius: 10px 10px 0 0;
+        width: 80px;
+    }
+
+    .user-image {
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+        background-color: #000;
+    }
+
+    .user-id {
+        font-size: 24px;
+        font-weight: bold;
+        color: #FFF;
+        background-color: #007BFF;
+        padding: 0px 10px;
+        border-radius: 5px;
+        width: 120px;
+    }
+
+    .buttons {
+        display: flex;
+        justify-content: center;
+        gap: 10px;
+    }
+
+    .btn-primary {
+        background-color: #007BFF;
+        border-color: #007BFF;
+    }
+
+    .btn-secondary {
+        background-color: #6c757d;
+        border-color: #6c757d;
+    }
+
+    .swal2-confirm.btn-success {
+        background-color: #449d44;
+        border-color: #398439;
+    }
+
+    .swal2-confirm.btn-danger {
+        background-color: #c9302c;
+        border-color: #ac2925;
+    }
+
+
+    .modal-background {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 1000;
+    }
+
+    .confirmation {
+        background: white;
+        padding: 30px;
+        border-radius: 10px;
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+        width: 400px;
+        text-align: center;
+    }
+
+    .confirmation p {
+        margin-bottom: 20px;
+        font-size: 18px;
+        font-weight: normal; /* Cambiado de bold a normal */
+        color: #333; /* Color para asegurar buena visibilidad */
+    }
+
+    .confirmation button {
+        padding: 10px 20px;
+        background-color: #1d3782;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 16px;
+    }
+
+    .confirmation button:hover {
+        background-color: #0f2460;
+    }
+
+
+    /* Botones */
+    .btn-primary {
+        background-color: #B0C0CD;
+        border-color: #B0C0CD;
+        color: black;
+        font-weight: bold;
+        margin-right: 5px;
+    }
+
+    .btn-primary:hover {
+        background-color: #003d80; /* Azul oscuro */
+        border-color: #003d80;
+        color: white;
+    }
+
+    .btn-secondary {
+        background-color: #B0C0CD;
+        border-color: #B0C0CD;
+        color: black;
+        font-weight: bold;
+        transition: background-color 0.3s ease;
+    }
+
+    .btn-secondary:hover {
+        background-color: #003d80; /* Azul oscuro */
+        border-color: #003d80;
+        color: white;
+    }
+
+    button[type="submit"], button[type="reset"] {
+        padding: 10px 20px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+</style>
+
