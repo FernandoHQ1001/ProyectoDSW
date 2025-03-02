@@ -1,7 +1,10 @@
-﻿using Bodega.SolProyectoWeb.Entidades.Core;
+﻿using Bodega.SolProyectoWeb.AccesoDatos.Core;
+using Bodega.SolProyectoWeb.Entidades.Core;
 using Bodega.SolProyectoWeb.LogicaNegocio.Core;
 using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
+using System.Diagnostics;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -14,6 +17,7 @@ namespace Bodega.SolProyectoWeb.ClienteWeb.Controllers
         // GET: Inventario/ActualizarProducto/5
         public ActionResult ActualizarProducto()
         {
+
             Producto producto = new Producto();
 
             // Obtener las categorías desde la base de datos
@@ -39,6 +43,12 @@ namespace Bodega.SolProyectoWeb.ClienteWeb.Controllers
 
             Producto producto = new ProductoLN().BuscarProductoPorNombre(nombre);
 
+            Debug.WriteLine($"CARGAR PRODUCTO");
+            Debug.WriteLine($"producto id: {producto.id_producto}");
+            Debug.WriteLine($"producto nombre: {producto.nombre}");
+            Debug.WriteLine($"producto stock: {producto.stock}");
+            Debug.WriteLine($"producto precio: {producto.precio}");
+
 
             // Obtener las categorías 
             var categorias = new CategoriaLN().ListarCategorias();
@@ -50,7 +60,7 @@ namespace Bodega.SolProyectoWeb.ClienteWeb.Controllers
             }
             else
             {
-                TempData["Message"] = "No se encontró un producto que coincida con el código de producto ingresado.";
+                TempData["Message"] = "No se encontró un producto que coincida con el nombre de producto ingresado.";
                 TempData["MessageType"] = "error"; // Error
                 ViewBag.ProductoNoEncontrado = true;
                 return View("ActualizarProducto", new Producto());
@@ -61,8 +71,32 @@ namespace Bodega.SolProyectoWeb.ClienteWeb.Controllers
         [HttpPost]
         public ActionResult ActualizarProducto(Producto producto)
         {
+
+            Debug.WriteLine($"ACTUALIZAR PRODUCTO");
+            Debug.WriteLine($"producto id: {producto.id_producto}");
+            Debug.WriteLine($"producto nombre: {producto.nombre}");
+            Debug.WriteLine($"producto stock: {producto.stock}");
+            Debug.WriteLine($"producto precio: {producto.precio}");
+
+
             try
             {
+            
+    
+
+                Debug.WriteLine($"producto precio: {producto.precio}");
+
+                if (!ModelState.IsValid)
+                {
+                    // Mostrar los errores de validación
+                    foreach (var modelError in ModelState.Values.SelectMany(v => v.Errors))
+                    {
+                        Debug.WriteLine($"Error: {modelError.ErrorMessage}");
+                    }
+
+                    // El resto de tu código para manejar el error
+                }
+
                 if (ModelState.IsValid)
                 {
                     new ProductoLN().ModificarProducto(producto);
@@ -82,12 +116,18 @@ namespace Bodega.SolProyectoWeb.ClienteWeb.Controllers
 
                 return View(producto);
             }
-            catch
+            catch(Exception ex)
             {
                 var categorias = new CategoriaLN().ListarCategorias();
                 ViewBag.Categorias = categorias;
-                TempData["Message"] = "Ingrese y cargue el producto a actualizar.";
+
+                // Mostrar el error en el TempData
+                TempData["Message"] = $"Ocurrió un error al actualizar el producto: {ex.Message}";
                 TempData["MessageType"] = "error"; // Error
+
+  
+                Console.WriteLine($"Error al actualizar producto: {ex.Message}");
+
                 return View(producto);
             }
         }
@@ -96,6 +136,9 @@ namespace Bodega.SolProyectoWeb.ClienteWeb.Controllers
         [HttpPost]
         public ActionResult EliminarProducto(int id_producto)
         {
+            Debug.WriteLine($"producto id: {id_producto}");
+
+
             if (id_producto == 0)
             {
 
@@ -118,10 +161,12 @@ namespace Bodega.SolProyectoWeb.ClienteWeb.Controllers
                 TempData["Message"] = "La eliminación del producto se realizó con éxito";
                 TempData["MessageType"] = "success"; // Éxito
             }
-            catch
+            catch (Exception ex)
             {
-                TempData["Message"] = "Ocurrió un error al intentar eliminar el producto.";
+                TempData["Message"] = $"Ocurrió un error al intentar eliminar el producto: {ex.Message}";
                 TempData["MessageType"] = "error"; // Error
+
+                Console.WriteLine($"Error al eliminar producto: {ex.Message}");
             }
 
             return RedirectToAction("ActualizarProducto");

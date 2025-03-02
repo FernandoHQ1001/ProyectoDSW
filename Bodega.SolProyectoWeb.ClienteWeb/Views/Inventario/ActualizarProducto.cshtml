@@ -7,7 +7,7 @@
 <div class="actualizar-producto-container">
 
     <div class="header-container">
-        <img src="~/Content/dist/img/TodoEnUno_SinFondo.png" alt="Logo imagen" class="logo-image" />
+
         <h2>ACTUALIZAR PRODUCTO</h2>
     </div>
 
@@ -84,26 +84,32 @@
             </div>
         </div>
 
+
         <div class="buttons text-center mt-4">
             <!-- Botón Guardar -->
             <button type="submit" class="btn btn-primary">Guardar</button>
 
             <!-- Botón Cancelar -->
             <a href="@Url.Action("ActualizarProducto", "Inventario")" class="btn btn-secondary">Cancelar</a>
-
-
-
-
-            <!-- Formulario de eliminación -->
-            @using (Html.BeginForm("EliminarProducto", "Inventario", FormMethod.Post))
-            {
-                @Html.AntiForgeryToken()
-                <input type="hidden" name="id_producto" value="@Model.id_producto" />
-
-                <button type="submit" class="btn btn-danger">Eliminar</button>
-
-            }
         </div>
+    }
+
+
+
+
+    <!-- Formulario de eliminación -->
+    @using (Html.BeginForm("EliminarProducto", "Inventario", FormMethod.Post))
+    {
+        @Html.AntiForgeryToken()
+        <input type="hidden" name="id_producto" value="@Model.id_producto" />
+
+        <!-- Botón Eliminar con confirmación -->
+        <div class="buttons text-center mt-4">
+            <button type="submit" class="btn btn-danger" onclick="return confirm('¿Estás seguro de que deseas eliminar este producto?');">Eliminar</button>
+        </div>
+    }
+
+</div>
     }
 </div>
 
@@ -151,16 +157,19 @@
         });
 
 
-        //Formateo de precio
-        $(document).ready(function () {
-            $('form').submit(function () {
-                var precio = $('#precio').val();
-                if (precio) {
-                    $('#precio').val(precio.replace(',', '.'));
-                }
-            });
-        });
+        $('form').submit(function () {
+            var precio = $('#precio').val();
+            if (precio && precio !== '') { // Asegurarse de que el precio tiene un valor
+                // Solo reemplazar el punto por coma si hay un punto en el valor
+                if (precio.includes('.')) {
+                    $('#precio').val(precio.replace('.', ','));
 
+                }
+                if (precio.includes(',')) {
+                    $('#precio').val(precio.replace(',', ','));
+                }
+            }
+        });
 
     </script>
 }
@@ -175,7 +184,7 @@
     }
 
     .header-container {
-        background-color: #ffcd00;
+        background-color: #F7C367;
         padding: 10px;
         display: flex;
         align-items: center;
@@ -202,7 +211,7 @@
     }
 
     h2 {
-        background-color: #ffcd00;
+        background-color: #F7C367;
         padding: 10px;
         text-align: center;
         color: #333;
@@ -352,5 +361,41 @@
     /* Opcional: Eliminar el ícono de "check" si se muestra */
     .swal2-icon.swal2-success {
         display: none; /* Esto oculta el ícono de "check" */
+    }
+
+    /* Botones */
+    .btn-primary {
+        background-color: #B0C0CD;
+        border-color: #B0C0CD;
+        color: black;
+        font-weight: bold;
+        margin-right: 5px;
+    }
+
+        .btn-primary:hover {
+            background-color: #003d80; /* Azul oscuro */
+            border-color: #003d80;
+            color: white;
+        }
+
+    .btn-secondary {
+        background-color: #B0C0CD;
+        border-color: #B0C0CD;
+        color: black;
+        font-weight: bold;
+        transition: background-color 0.3s ease;
+    }
+
+        .btn-secondary:hover {
+            background-color: #003d80; /* Azul oscuro */
+            border-color: #003d80;
+            color: white;
+        }
+
+    button[type="submit"], button[type="reset"] {
+        padding: 10px 20px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
     }
 </style>

@@ -57,9 +57,21 @@ namespace Bodega.SolProyectoWeb.AccesoDatos.Core
                     con.Open();
                     cmd.ExecuteNonQuery();
                 }
-                catch (Exception)
+                catch (SqlException sqlEx)
                 {
-                    throw;
+
+                    // Capturar el mensaje detallado del error
+                    Console.WriteLine($"SQL Error: {sqlEx.Message}");
+                    Console.WriteLine($"SQL Error Code: {sqlEx.Number}");
+                    Console.WriteLine($"SQL Error Details: {sqlEx.ToString()}");
+
+                    // Lanzar una excepción de aplicación con detalles
+                    throw new ApplicationException($"Error en la base de datos al eliminar el producto con ID {id_producto}: {sqlEx.Message}", sqlEx);
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Error: {ex.Message}");
+                    throw new ApplicationException($"Error al eliminar el producto con ID {id_producto}: {ex.Message}", ex);
                 }
             }
         }
