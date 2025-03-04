@@ -65,7 +65,6 @@
     </div>
 </div>
 
-
 @section Scripts{
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -75,31 +74,40 @@
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
     <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
 
+    <!-- SweetAlert2 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <script>
-
         $(document).ready(function () {
+            // Leer mensaje desde los div ocultos en el HTML
+            var message = "@Html.Raw(TempData["Message"])";
+            var messageType = "@Html.Raw(TempData["MessageType"])";
 
-            var message = '@Html.Raw(TempData["Message"] ?? "")';
-            var messageType = '@TempData["MessageType"]';
+            console.log("📢 Mensaje recibido:", message);
+            console.log("📢 Tipo de mensaje:", messageType);
 
-            if (message) {
+            if (message !== "") {
+                console.log("✅ Ejecutando Swal.fire()");
                 Swal.fire({
-
                     text: message,
-                    icon: (messageType === "success" || messageType === "error" || messageType === "warning") ? null : messageType,
+                    icon: (["success", "error", "warning", "info"].includes(messageType)) ? messageType : "info",
                     confirmButtonText: 'Aceptar',
                     confirmButtonColor: '#007bff',
                     customClass: {
                         confirmButton: (messageType === "success") ? 'btn-success' :
                             (messageType === "error") ? 'btn-danger' :
-                                'btn-warning'
+                                (messageType === "warning") ? 'btn-warning' :
+                                    'btn-info'
                     }
+                }).then(() => {
+                    console.log("✅ Swal.fire() se mostró correctamente.");
                 });
+            } else {
+                console.log("⛔ No hay mensaje, no se ejecuta Swal.fire()");
             }
         });
 
-        //Formateo de precio
+        // Formateo de precio antes de enviar formulario
         $(document).ready(function () {
             $('form').submit(function () {
                 var valor = $('#valor').val();
@@ -109,44 +117,44 @@
             });
         });
     </script>
+}
+<style>
+    #tablax th, #tablax td {
+        text-align: center;
+        vertical-align: middle;
+    }
 
-    <style>
-        #tablax th, #tablax td {
-            text-align: center;
-            vertical-align: middle;
-        }
+    #tablax th, #tablax td {
+        white-space: nowrap;
+    }
 
-        #tablax th, #tablax td {
-            white-space: nowrap;
-        }
+    .swal2-icon.swal2-success {
+        display: none; /* Esto oculta el ícono de "check" */
+    }
+</style>
 
-        .swal2-icon.swal2-success {
-            display: none; /* Esto oculta el ícono de "check" */
-        }
-    </style>
+<style>
+    .consulta-inventario-container {
+        background: url('/ruta/de/tu/fondo.jpg') center/cover no-repeat;
+        padding: 30px;
+        border-radius: 8px;
+        color: #333;
+        max-width: 1200px;
+        margin: 0 auto;
+    }
 
-    <style>
-        .consulta-inventario-container {
-            background: url('/ruta/de/tu/fondo.jpg') center/cover no-repeat;
-            padding: 30px;
-            border-radius: 8px;
-            color: #333;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        .header-container {
-            background-color: #F7C367;
-            padding: 20px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 8px;
-            color: black;
-            font-weight: bold;
-            position: relative;
-            margin-bottom: 30px;
-        }
+    .header-container {
+        background-color: #F7C367;
+        padding: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 8px;
+        color: black;
+        font-weight: bold;
+        position: relative;
+        margin-bottom: 30px;
+    }
 
         .header-container h2 {
             margin: 0;
@@ -156,36 +164,36 @@
             text-align: center;
         }
 
-        .logo-image {
-            position: absolute;
-            left: 10px;
-            max-width: 150px;
-            height: auto;
-        }
+    .logo-image {
+        position: absolute;
+        left: 10px;
+        max-width: 150px;
+        height: auto;
+    }
 
-        form {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 20px;
-            margin-bottom: 30px;
-        }
+    form {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 20px;
+        margin-bottom: 30px;
+    }
 
-        select, input[type="text"] {
-            padding: 8px;
-            width: 200px;
-            border-radius: 5px;
-            border: 1px solid #ddd;
-        }
+    select, input[type="text"] {
+        padding: 8px;
+        width: 200px;
+        border-radius: 5px;
+        border: 1px solid #ddd;
+    }
 
-        /* Botones */
-        .btn-primary {
-            background-color: #B0C0CD;
-            border-color: #B0C0CD;
-            color: black;
-            font-weight: bold;
-            margin-right: 5px;
-        }
+    /* Botones */
+    .btn-primary {
+        background-color: #B0C0CD;
+        border-color: #B0C0CD;
+        color: black;
+        font-weight: bold;
+        margin-right: 5px;
+    }
 
         .btn-primary:hover {
             background-color: #003d80; /* Azul oscuro */
@@ -193,13 +201,13 @@
             color: white;
         }
 
-        .btn-secondary {
-            background-color: #B0C0CD;
-            border-color: #B0C0CD;
-            color: black;
-            font-weight: bold;
-            transition: background-color 0.3s ease;
-        }
+    .btn-secondary {
+        background-color: #B0C0CD;
+        border-color: #B0C0CD;
+        color: black;
+        font-weight: bold;
+        transition: background-color 0.3s ease;
+    }
 
         .btn-secondary:hover {
             background-color: #003d80; /* Azul oscuro */
@@ -207,72 +215,72 @@
             color: white;
         }
 
-        button[type="submit"], button[type="reset"] {
-            padding: 10px 20px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
+    button[type="submit"], button[type="reset"] {
+        padding: 10px 20px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+    }
 
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            background-color: rgba(255, 255, 255, 0.9);
-            margin-bottom: 20px;
-        }
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        background-color: rgba(255, 255, 255, 0.9);
+        margin-bottom: 20px;
+    }
 
-        th, td {
-            padding: 15px;
-            border: 1px solid #ddd;
-            text-align: center;
-        }
+    th, td {
+        padding: 15px;
+        border: 1px solid #ddd;
+        text-align: center;
+    }
 
-        th {
-            background-color: #F7C367;
-            color: black;
-            font-weight: bold;
-        }
+    th {
+        background-color: #F7C367;
+        color: black;
+        font-weight: bold;
+    }
 
-        .action-buttons {
-            margin-top: 30px;
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-        }
+    .action-buttons {
+        margin-top: 30px;
+        display: flex;
+        justify-content: center;
+        gap: 20px;
+    }
 
-        .swal-popup-custom {
-            background-color: #ffffff !important; /* Fondo blanco */
-            border-radius: 8px; /* Esquinas redondeadas */
-            color: #333333; /* Color de texto */
-        }
+    .swal-popup-custom {
+        background-color: #ffffff !important; /* Fondo blanco */
+        border-radius: 8px; /* Esquinas redondeadas */
+        color: #333333; /* Color de texto */
+    }
 
-        .swal-button-custom {
-            background-color: #007bff !important; /* Azul para el botón */
-            color: #d3d3d3 !important; /* Texto blanco en el botón */
-            border-radius: 5px; /* Botón con bordes redondeados */
-            padding: 10px 20px; /* Tamaño del botón */
-            font-weight: bold;
-        }
+    .swal-button-custom {
+        background-color: #007bff !important; /* Azul para el botón */
+        color: #d3d3d3 !important; /* Texto blanco en el botón */
+        border-radius: 5px; /* Botón con bordes redondeados */
+        padding: 10px 20px; /* Tamaño del botón */
+        font-weight: bold;
+    }
 
-        /* Estilos adicionales para las sugerencias */
-        #suggestions {
-            background: white;
-            border: 1px solid #ddd;
-            max-height: 150px;
-            overflow-y: auto;
-            position: absolute;
-            z-index: 1000;
-        }
+    /* Estilos adicionales para las sugerencias */
+    #suggestions {
+        background: white;
+        border: 1px solid #ddd;
+        max-height: 150px;
+        overflow-y: auto;
+        position: absolute;
+        z-index: 1000;
+    }
 
         #suggestions li {
             padding: 8px;
             cursor: pointer;
         }
 
-        #suggestions li:hover {
-            background-color: #007bff;
-            color: white;
-        }
-    </style>
+            #suggestions li:hover {
+                background-color: #007bff;
+                color: white;
+            }
+</style>
 
 }

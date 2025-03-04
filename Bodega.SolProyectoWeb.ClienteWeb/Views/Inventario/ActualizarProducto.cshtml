@@ -111,67 +111,61 @@
 
 </div>
     }
-</div>
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
 
+    <!-- jQuery (solo una versión) -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.css">
-    <!--  SweetAlert2 -->
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css" rel="stylesheet">
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <!-- jQuery UI -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.css" rel="stylesheet">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script type="text/javascript"></script>
+
+    <!-- SweetAlert2 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css" rel="stylesheet">
+
     <script>
-
         $(document).ready(function () {
-            // Obtener el mensaje del TempData
-            var message = '@Html.Raw(TempData["Message"] ?? "")';
-            var messageType = '@TempData["MessageType"]';
+            setTimeout(function () {
+                var message = "@Html.Raw(TempData["Message"])";
+                var messageType = "@Html.Raw(TempData["MessageType"])";
 
-            if (message) { // Si hay mensaje, mostrar modal
-                Swal.fire({
+                console.log("📢 Valor del div tempDataMessage:", message);
+                console.log("📢 Valor del div tempDataMessageType:", messageType);
 
-                    text: message,
-                    icon: (messageType === "success" || messageType === "error" || messageType === "warning") ? null : messageType,
-                    confirmButtonText: 'Aceptar',
-                    confirmButtonColor: '#007bff',
-                    customClass: {
-                        confirmButton: 'swal2-confirm'
-                        /*confirmButton: (messageType === "success") ? 'btn-success' :
-                            (messageType === "error") ? 'btn-danger' :
-                                'btn-warning'*/
-                    }
-                });
-            }
+                if (message !== "") {
+                    console.log("✅ Ejecutando Swal.fire()");
+                    Swal.fire({
+                        text: message,
+                        icon: messageType || "info",
+                        confirmButtonText: 'Aceptar',
+                        confirmButtonColor: '#007bff'
+                    }).then(() => {
+                        console.log("✅ Swal.fire() se mostró correctamente.");
+                    });
+                } else {
+                    console.log("⛔ No hay mensaje, no se ejecuta Swal.fire()");
+                }
+            }, 500);
         });
-
 
         $('form').submit(function () {
             var precio = $('#precio').val();
-            if (precio && precio !== '') { // Asegurarse de que el precio tiene un valor
-                // Solo reemplazar el punto por coma si hay un punto en el valor
+            if (precio && precio !== '') {
                 if (precio.includes('.')) {
                     $('#precio').val(precio.replace('.', ','));
-
                 }
                 if (precio.includes(',')) {
-                    $('#precio').val(precio.replace(',', ',')); 
+                    $('#precio').val(precio.replace(',', ','));
+                }
             }
         });
-
     </script>
 }
+
+
 <style>
     .actualizar-producto-container {
         background: url('/path/to/background.jpg') center/cover no-repeat;

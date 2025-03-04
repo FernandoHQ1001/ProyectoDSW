@@ -38,6 +38,7 @@ namespace Bodega.SolProyectoWeb.ClienteWeb.Controllers
             {
                 TempData["Message"] = "Debe ingresar el nombre del producto que desea buscar.";
                 TempData["MessageType"] = "warning"; // Advertencia
+                TempData.Keep("Message");
                 return RedirectToAction("ActualizarProducto");
             }
 
@@ -55,6 +56,7 @@ namespace Bodega.SolProyectoWeb.ClienteWeb.Controllers
             {
                 TempData["Message"] = "No se encontró un producto que coincida con el nombre de producto ingresado.";
                 TempData["MessageType"] = "error"; // Error
+                TempData.Keep("Message");
                 ViewBag.ProductoNoEncontrado = true;
                 return View("ActualizarProducto", new Producto());
             }
@@ -86,6 +88,7 @@ namespace Bodega.SolProyectoWeb.ClienteWeb.Controllers
 
                     TempData["Message"] = "La actualización del producto se realizo con éxito.";
                     TempData["MessageType"] = "success"; // Éxito
+                    TempData.Keep("Message");
 
                     return RedirectToAction("ActualizarProducto");
                 }
@@ -95,6 +98,7 @@ namespace Bodega.SolProyectoWeb.ClienteWeb.Controllers
 
                 TempData["Message"] = "Hay errores en el formulario. Por favor corrígelos.";
                 TempData["MessageType"] = "error"; // Error
+                TempData.Keep("Message");
 
                 return View(producto);
             }
@@ -106,8 +110,9 @@ namespace Bodega.SolProyectoWeb.ClienteWeb.Controllers
                 // Mostrar el error en el TempData
                 TempData["Message"] = $"Ocurrió un error al actualizar el producto: {ex.Message}";
                 TempData["MessageType"] = "error"; // Error
+                TempData.Keep("Message");
 
-  
+
                 Console.WriteLine($"Error al actualizar producto: {ex.Message}");
 
                 return View(producto);
@@ -124,6 +129,7 @@ namespace Bodega.SolProyectoWeb.ClienteWeb.Controllers
 
                 TempData["Message"] = "Ingrese el producto a eliminar.";
                 TempData["MessageType"] = "error"; // Error
+                TempData.Keep("Message");
                 return RedirectToAction("ActualizarProducto");
             }
 
@@ -135,16 +141,19 @@ namespace Bodega.SolProyectoWeb.ClienteWeb.Controllers
                 {
                     TempData["Message"] = "El producto que intentas eliminar no existe.";
                     TempData["MessageType"] = "warning"; // Advertencia
+                    TempData.Keep("Message");
                     return RedirectToAction("ActualizarProducto");
                 }
                 new ProductoLN().EliminarProducto(id_producto);
                 TempData["Message"] = "La eliminación del producto se realizó con éxito";
                 TempData["MessageType"] = "success"; // Éxito
+                TempData.Keep("Message");
             }
             catch (Exception ex)
             {
                 TempData["Message"] = $"Ocurrió un error al intentar eliminar el producto: {ex.Message}";
                 TempData["MessageType"] = "error"; // Error
+                TempData.Keep("Message");   
 
             }
 
@@ -246,6 +255,7 @@ namespace Bodega.SolProyectoWeb.ClienteWeb.Controllers
                 {
                     TempData["Message"] = "Debe seleccionar un criterio para realizar la búsqueda.";
                     TempData["MessageType"] = "error";
+                    TempData.Keep("Message");
                     return RedirectToAction("ConsultarInventario");
                 }
 
@@ -253,6 +263,7 @@ namespace Bodega.SolProyectoWeb.ClienteWeb.Controllers
                 {
                     TempData["Message"] = "Debe ingresar un valor para el criterio seleccionado.";
                     TempData["MessageType"] = "error";
+                    TempData.Keep("Message");
                     return RedirectToAction("ConsultarInventario");
                 }
 
@@ -285,6 +296,7 @@ namespace Bodega.SolProyectoWeb.ClienteWeb.Controllers
 
                             TempData["Message"] = "No se encontró ninguna categoría con el nombre ingresado.";
                             TempData["MessageType"] = "error";
+                            TempData.Keep("Message");
                             return RedirectToAction("ConsultarInventario");
                         }
                     }
@@ -303,6 +315,7 @@ namespace Bodega.SolProyectoWeb.ClienteWeb.Controllers
             {
                 TempData["Message"] = "Ocurrió un error al consultar el inventario.";
                 TempData["MessageType"] = "error";
+                TempData.Keep("Message");
                 return RedirectToAction("ConsultarInventario");
             }
         }
