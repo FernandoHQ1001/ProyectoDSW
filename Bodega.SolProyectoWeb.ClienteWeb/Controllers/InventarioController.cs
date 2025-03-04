@@ -43,13 +43,6 @@ namespace Bodega.SolProyectoWeb.ClienteWeb.Controllers
 
             Producto producto = new ProductoLN().BuscarProductoPorNombre(nombre);
 
-            Debug.WriteLine($"CARGAR PRODUCTO");
-            Debug.WriteLine($"producto id: {producto.id_producto}");
-            Debug.WriteLine($"producto nombre: {producto.nombre}");
-            Debug.WriteLine($"producto stock: {producto.stock}");
-            Debug.WriteLine($"producto precio: {producto.precio}");
-
-
             // Obtener las categorías 
             var categorias = new CategoriaLN().ListarCategorias();
             ViewBag.Categorias = categorias;
@@ -72,19 +65,8 @@ namespace Bodega.SolProyectoWeb.ClienteWeb.Controllers
         public ActionResult ActualizarProducto(Producto producto)
         {
 
-            Debug.WriteLine($"ACTUALIZAR PRODUCTO");
-            Debug.WriteLine($"producto id: {producto.id_producto}");
-            Debug.WriteLine($"producto nombre: {producto.nombre}");
-            Debug.WriteLine($"producto stock: {producto.stock}");
-            Debug.WriteLine($"producto precio: {producto.precio}");
-
-
             try
             {
-            
-    
-
-                Debug.WriteLine($"producto precio: {producto.precio}");
 
                 if (!ModelState.IsValid)
                 {
@@ -136,8 +118,6 @@ namespace Bodega.SolProyectoWeb.ClienteWeb.Controllers
         [HttpPost]
         public ActionResult EliminarProducto(int id_producto)
         {
-            Debug.WriteLine($"producto id: {id_producto}");
-
 
             if (id_producto == 0)
             {
@@ -166,7 +146,6 @@ namespace Bodega.SolProyectoWeb.ClienteWeb.Controllers
                 TempData["Message"] = $"Ocurrió un error al intentar eliminar el producto: {ex.Message}";
                 TempData["MessageType"] = "error"; // Error
 
-                Console.WriteLine($"Error al eliminar producto: {ex.Message}");
             }
 
             return RedirectToAction("ActualizarProducto");
